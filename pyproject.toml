@@ -1,0 +1,8 @@
+[project]
+name = "your-project-name"
+version = "0.1.0"
+description = "Your app"
+requires-python = ">=3.11"
+dependencies = [
+    "pyside6",
+]

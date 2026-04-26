@@ -3,4 +3,5 @@
 
 requirements.txt
 prompt.txt
+.venv/
 sys
