@@ -12,9 +12,10 @@ def main() -> None:
 
     engine = QQmlApplicationEngine()
 
-    qml_file = Path(__file__).parent / "qml" / "Main.qml"
-    engine.load(qml_file)
-
+    qml_dir = Path(__file__).parent / "qml"
+    engine.addImportPath(str(qml_dir))          # points at qml/, which contains ArrheniusCalculator/
+    engine.load(qml_dir / "Main.qml")
+    
     if not engine.rootObjects():
         sys.exit(-1)
 

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import ArrheniusCalculator
 
 // ── Reusable button ───────────────────────────────────────────────────────
 // Usage:
@@ -24,14 +25,14 @@ AbstractButton {
         color: {
             if (control.primary) {
                 return control.hovered
-                       ? ApplicationWindow.window.colorAccentHov
-                       : ApplicationWindow.window.colorAccent
+                       ? Style.colorAccentHov
+                       : Style.colorAccent
             }
             return control.hovered
                    ? Qt.rgba(0.17, 0.29, 0.49, 0.08)   // very light tint on hover
                    : "transparent"
         }
-        border.color: ApplicationWindow.window.colorAccent
+        border.color: Style.colorAccent
         border.width: 1.5
 
         Behavior on color {
@@ -48,8 +49,8 @@ AbstractButton {
             letterSpacing: 0.3
         }
         color: control.primary
-               ? ApplicationWindow.window.colorSurface
-               : ApplicationWindow.window.colorAccent
+               ? Style.colorSurface
+               : Style.colorAccent
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
@@ -59,6 +60,4 @@ AbstractButton {
     Behavior on scale {
         NumberAnimation { duration: 80 }
     }
-
-
 }

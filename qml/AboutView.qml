@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import ArrheniusCalculator
 
 // ── About view ────────────────────────────────────────────────────────────
 Item {
@@ -28,9 +29,9 @@ Item {
                 implicitHeight: 36
                 radius: 18
                 color: backMouse.containsMouse
-                       ? ApplicationWindow.window.colorAccent
+                       ? Style.colorAccent
                        : "transparent"
-                border.color: ApplicationWindow.window.colorAccent
+                border.color: Style.colorAccent
                 border.width: 1.5
 
                 Behavior on color {
@@ -42,8 +43,8 @@ Item {
                     text: "←"
                     font.pixelSize: 16
                     color: backMouse.containsMouse
-                           ? ApplicationWindow.window.colorSurface
-                           : ApplicationWindow.window.colorAccent
+                           ? Style.colorSurface
+                           : Style.colorAccent
 
                     Behavior on color {
                         ColorAnimation { duration: 120 }
@@ -68,7 +69,7 @@ Item {
                     weight: Font.DemiBold
                     letterSpacing: 0.5
                 }
-                color: ApplicationWindow.window.colorText
+                color: Style.colorText
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
             }
@@ -78,7 +79,7 @@ Item {
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 2
-            color: ApplicationWindow.window.colorAccent
+            color: Style.colorAccent
             opacity: 0.25
             radius: 1
         }
@@ -87,8 +88,8 @@ Item {
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            color: ApplicationWindow.window.colorSurface
-            border.color: ApplicationWindow.window.colorBorder
+            color: Style.colorSurface
+            border.color: Style.colorBorder
             border.width: 1
             radius: 8
 
@@ -114,7 +115,7 @@ Item {
                         family: "Georgia"
                         pixelSize: 14
                     }
-                    color: ApplicationWindow.window.colorText
+                    color: Style.colorText
                     lineHeight: 1.6
                     wrapMode: Text.WordWrap
                 }
