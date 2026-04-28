@@ -9,7 +9,7 @@ Item {
 
     // Attached property — available automatically when this item is inside a StackView
     property StackView stackView: StackView.view as StackView
-    
+
     // ── Layout ────────────────────────────────────────────────────────────
     ColumnLayout {
         anchors {
@@ -110,9 +110,7 @@ Item {
                 Layout.fillWidth: true
                 text: qsTr("Launch")
                 primary: true
-                onClicked: {
-                    // TODO: implement launch logic
-                }
+                onClicked: root.stackView.push(Qt.resolvedUrl("OptionView.qml"))
             }
 
             AppButton {
