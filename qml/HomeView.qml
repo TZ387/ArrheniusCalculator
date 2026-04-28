@@ -8,8 +8,8 @@ Item {
     id: root
 
     // Attached property — available automatically when this item is inside a StackView
-    property StackView stackView: StackView.view
-
+    property StackView stackView: StackView.view as StackView
+    
     // ── Layout ────────────────────────────────────────────────────────────
     ColumnLayout {
         anchors {

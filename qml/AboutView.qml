@@ -8,8 +8,8 @@ Item {
     id: root
 
     // Grab the StackView from the parent hierarchy
-    property StackView stackView: StackView.view
-
+    property StackView stackView: StackView.view as StackView
+    
     ColumnLayout {
         anchors {
             fill: parent
