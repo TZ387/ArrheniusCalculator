@@ -15,6 +15,9 @@ AbstractButton {
     implicitHeight: 42
     implicitWidth: 120
 
+    hoverEnabled: true
+    HoverHandler { cursorShape: Qt.PointingHandCursor }
+
     // ── Visuals ───────────────────────────────────────────────────────────
     background: Rectangle {
         radius: 6
@@ -57,14 +60,5 @@ AbstractButton {
         NumberAnimation { duration: 80 }
     }
 
-    MouseArea {
-        anchors.fill: parent
-        hoverEnabled: true
-        cursorShape: Qt.PointingHandCursor
-        onClicked: control.clicked()
-        onPressed: control.pressed = true
-        onReleased: control.pressed = false
-        onEntered: control.hovered = true
-        onExited: control.hovered = false
-    }
+
 }

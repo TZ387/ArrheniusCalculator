@@ -24,8 +24,8 @@ Item {
             // Back button (icon-style arrow)
             Rectangle {
                 id: backBtn
-                width: 36
-                height: 36
+                implicitWidth: 36
+                implicitHeight: 36
                 radius: 18
                 color: backMouse.containsMouse
                        ? ApplicationWindow.window.colorAccent
