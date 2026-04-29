@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ArrheniusCalculator"
-version = "0.1.0"
+name = "arrheniuscalculator"
+version = "0.1.1"
 description = "A simple GUI tool for calculating Arrhenius integral."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -14,9 +14,13 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["."]
+include = ["arrheniuscalculator*"]
 
 [tool.setuptools.package-data]
-"ArrheniusCalculator" = ["qml/*.qml"]
+"arrheniuscalculator" = [
+    "qml/*.qml",
+    "qml/ArrheniusCalculator/*"
+]
 
 [project.scripts]
-your-app = "ArrheniusCalculator.main:main"
+arrheniuscalculator = "arrheniuscalculator.main:main"

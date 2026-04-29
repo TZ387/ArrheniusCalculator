@@ -2,18 +2,36 @@
 
 The intention of this project is to develop a simple QML GUI application that will calculate the Arrhenius integral for various cases (tabular data, functional data, etc.).
 
-## Installation
+The project is currently in the process of being published on pypi package index, so except installation instructions to not work correctly.
 
-### Option 1: Using uv
+## Option 1: Install from PyPi
+
+### Option a: Using uv
+
+```bash
+uv add arrheniuscalculator
+uv run arrheniuscalculator
+```
+
+### Option b: Using pip
+
+```bash
+pip install arrheniuscalculator
+arrheniuscalculator
+```
+
+## Option 2: Installation from source
+
+### Option a: Using uv
 
 ```bash
 git clone https://github.com/TZ387/ArrheniusCalculator.git
 cd ArrheniusCalculator
 uv sync
-uv run main.py
+uv run python -m arrheniuscalculator.main
 ```
 
-### Option 2: Using pip
+### Option b: Using pip
 
 ```bash
 git clone https://github.com/TZ387/ArrheniusCalculator.git
@@ -22,10 +40,7 @@ cd ArrheniusCalculator
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-pip install PySide6
-python main.py
+pip install -e .
+python -m arrheniuscalculator.main
 ```
 
-### Notes
-
-- No PyPI package yet — you need to install it directly from source
