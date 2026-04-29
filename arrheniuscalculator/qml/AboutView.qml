@@ -105,7 +105,7 @@ Item {
                     width: parent.width
                     text: qsTr(
                         "Arrhenius Calculator\n\n" +
-                        "Version: 0.1.0  (pre-release)\n\n" +
+                        "Version: 0.1.1  (pre-release)\n\n" +
                         "About & instructions — yet to be added.\n\n" +
                         "This section will describe the purpose of the tool, " +
                         "the Arrhenius equation background, how to enter data, " +
