@@ -91,7 +91,7 @@ Item {
                 Layout.fillWidth: true
                 text: qsTr("Basic calculation")
                 primary: false
-                onClicked: { /* TODO */ }
+                onClicked: root.stackView.push(Qt.resolvedUrl("BasicCalculationView.qml"))
             }
 
             AppButton {
