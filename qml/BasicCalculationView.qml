@@ -15,8 +15,8 @@ Item {
     Component.onCompleted: {
         var w = Window.window
         if (w) {
-            if (w.width  < 560) w.width  = 600
-            if (w.height < 780) w.height = 870
+            if (w.width  < 600) w.width  = 600
+            if (w.height < 870) w.height = 870
         }
     }
 
@@ -211,7 +211,7 @@ Item {
 
                 Text {
                     text: "Ω₁ ="
-                    font { family: "Georgia"; pixelSize: 14 }
+                    font { family: "Georgia"; pixelSize: 16 }
                     color: Style.colorMuted
                 }
 
@@ -272,7 +272,7 @@ Item {
 
                 Text {
                     text: "Ω₂ ="
-                    font { family: "Georgia"; pixelSize: 14 }
+                    font { family: "Georgia"; pixelSize: 16 }
                     color: Style.colorMuted
                 }
 
@@ -299,18 +299,46 @@ Item {
                 SectionLabel { text: "VHS calculation" }
                 Item { Layout.fillWidth: true }
 
-                // Help button — no functionality yet
+                // Help button — hover shows tooltip, no click action
                 Rectangle {
+                    id: helpBtn
                     implicitWidth: 28; implicitHeight: 28
                     radius: 14
                     color: "transparent"
-                    border.color: Style.colorMuted
+                    border.color: helpHover.hovered ? Style.colorAccent : Style.colorMuted
                     border.width: 1.5
+                    Behavior on border.color { ColorAnimation { duration: 120 } }
+
                     Text {
                         anchors.centerIn: parent
                         text: "?"
                         font { family: "Georgia"; pixelSize: 14; weight: Font.Medium }
-                        color: Style.colorMuted
+                        color: helpHover.hovered ? Style.colorAccent : Style.colorMuted
+                        Behavior on color { ColorAnimation { duration: 120 } }
+                    }
+
+                    HoverHandler { id: helpHover; cursorShape: Qt.WhatsThisCursor }
+
+                    ToolTip {
+                        visible: helpHover.hovered
+                        // Small delay so it doesn't flash on quick pass-overs
+                        delay: 400
+                        timeout: 8000
+                        contentItem: Text {
+                            text: "A simple formula taken from\n"
+                                + "\"Variable heat shock response model for medical laser procedures\"\n"
+                                + "article, whose intention is to generalise the Arrhenius calculation\n"
+                                + "for cases where you have short temperature peaks."
+                            font { family: "Georgia"; pixelSize: 12 }
+                            color: "#222222"
+                            wrapMode: Text.WordWrap
+                        }
+                        background: Rectangle {
+                            color: "#FFFBC8"          // classic tooltip yellow
+                            border.color: "#C8B400"
+                            border.width: 1
+                            radius: 4
+                        }
                     }
                 }
             }
@@ -330,14 +358,14 @@ Item {
                     Text {
                         id: vhsBase
                         text: "(1/Ω_vhs)"
-                        font { family: "Georgia"; pixelSize: 18; italic: true }
-                        color: Style.colorMuted
+                        font { family: "Georgia"; pixelSize: 20; italic: true; weight: Font.Bold }
+                        color: Style.colorText
                     }
                     // ^p
                     Text {
                         text: "p"
-                        font { family: "Georgia"; pixelSize: 11; italic: true }
-                        color: Style.colorMuted
+                        font { family: "Georgia"; pixelSize: 12; italic: true; weight: Font.Bold }
+                        color: Style.colorText
                         anchors.bottom: vhsBase.top
                         anchors.bottomMargin: -vhsBase.height * 0.4
                     }
@@ -345,13 +373,13 @@ Item {
                     Text {
                         id: vhsMid
                         text: "  =  (1/Ω₁)"
-                        font { family: "Georgia"; pixelSize: 18; italic: true }
-                        color: Style.colorMuted
+                        font { family: "Georgia"; pixelSize: 20; italic: true; weight: Font.Bold }
+                        color: Style.colorText
                     }
                     Text {
                         text: "p"
-                        font { family: "Georgia"; pixelSize: 11; italic: true }
-                        color: Style.colorMuted
+                        font { family: "Georgia"; pixelSize: 12; italic: true; weight: Font.Bold }
+                        color: Style.colorText
                         anchors.bottom: vhsMid.top
                         anchors.bottomMargin: -vhsMid.height * 0.4
                     }
@@ -359,13 +387,13 @@ Item {
                     Text {
                         id: vhsRight
                         text: "  +  (1/Ω₂)"
-                        font { family: "Georgia"; pixelSize: 18; italic: true }
-                        color: Style.colorMuted
+                        font { family: "Georgia"; pixelSize: 20; italic: true; weight: Font.Bold }
+                        color: Style.colorText
                     }
                     Text {
                         text: "p"
-                        font { family: "Georgia"; pixelSize: 11; italic: true }
-                        color: Style.colorMuted
+                        font { family: "Georgia"; pixelSize: 12; italic: true; weight: Font.Bold }
+                        color: Style.colorText
                         anchors.bottom: vhsRight.top
                         anchors.bottomMargin: -vhsRight.height * 0.4
                     }
@@ -406,7 +434,7 @@ Item {
 
                 Text {
                     text: "Ω_vhs ="
-                    font { family: "Georgia"; pixelSize: 14 }
+                    font { family: "Georgia"; pixelSize: 16 }
                     color: Style.colorMuted
                 }
 
@@ -437,7 +465,7 @@ Item {
 
         Text {
             text: pf.label
-            font { family: "Georgia"; pixelSize: 12 }
+            font { family: "Georgia"; pixelSize: 14 }
             color: Style.colorMuted
         }
 
@@ -455,7 +483,7 @@ Item {
                 anchors { fill: parent; leftMargin: 8; rightMargin: 8 }
                 verticalAlignment: TextInput.AlignVCenter
                 text: pf.defaultValue
-                font { family: "Georgia"; pixelSize: 13 }
+                font { family: "Georgia"; pixelSize: 15 }
                 color: Style.colorText
                 selectByMouse: true
                 // inputMethodHints intentionally omitted — allows +−*/
@@ -476,7 +504,7 @@ Item {
             anchors { fill: parent; leftMargin: 8; rightMargin: 8 }
             verticalAlignment: Text.AlignVCenter
             text: parent.value
-            font { family: "Georgia"; pixelSize: 13; italic: parent.value === "—" }
+            font { family: "Georgia"; pixelSize: 15; italic: parent.value === "—" }
             color: parent.value === "—" ? Style.colorMuted : Style.colorAccent
             elide: Text.ElideRight
         }
