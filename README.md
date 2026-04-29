@@ -1,12 +1,18 @@
 # ArrheniusCalculator
 
-The intention of this project is to develop a simple QML GUI application that will calculate the Arrhenius integral for various cases (tabular data, functional data, etc.).
+A simple QML GUI application that calculates the Arrhenius integral for various cases (tabular data, functional data, etc.).
 
-The project is currently in the process of being published on pypi package index, so except installation instructions to not work correctly.
+The program is still in development, so not all listed features are working.
 
 ## Option 1: Install from PyPi
 
 ### Option a: Using uv
+
+```bash
+uvx arrheniuscalculator
+```
+
+or inside a project:
 
 ```bash
 uv add arrheniuscalculator
@@ -28,7 +34,7 @@ arrheniuscalculator
 git clone https://github.com/TZ387/ArrheniusCalculator.git
 cd ArrheniusCalculator
 uv sync
-uv run python -m arrheniuscalculator.main
+uv run arrheniuscalculator
 ```
 
 ### Option b: Using pip
