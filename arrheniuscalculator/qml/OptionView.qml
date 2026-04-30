@@ -98,7 +98,7 @@ Item {
                 Layout.fillWidth: true
                 text: qsTr("Function calculation")
                 primary: false
-                onClicked: { /* TODO */ }
+                onClicked: root.stackView.push(Qt.resolvedUrl("FunctionCalculationView.qml"))
             }
         }
 
