@@ -689,13 +689,14 @@ Item {
         border.color: Style.colorBorder
         border.width: 1
 
-        Text {
+        TextInput {
             anchors { fill: parent; leftMargin: 8; rightMargin: 8 }
-            verticalAlignment: Text.AlignVCenter
+            verticalAlignment: TextInput.AlignVCenter
             text: parent.value
             font { family: "Georgia"; pixelSize: 15; italic: parent.value === "—" }
             color: parent.value === "—" ? Style.colorMuted : Style.colorAccent
-            elide: Text.ElideRight
+            readOnly: true          // prevents editing
+            selectByMouse: true     // enables Ctrl+C and mouse selection
         }
     }
 }
