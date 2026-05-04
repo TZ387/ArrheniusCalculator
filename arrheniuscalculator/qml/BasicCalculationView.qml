@@ -16,7 +16,7 @@ Item {
         var w = Window.window
         if (w) {
             if (w.width  < 600) w.width  = 600
-            if (w.height < 870) w.height = 870
+            if (w.height < 920) w.height = 920
         }
     }
 
@@ -175,8 +175,8 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 16
-                ParamField { id: a1Field;  label: "A [1/s]";    defaultValue: "1e13" }
-                ParamField { id: ea1Field; label: "Eₐ [J/mol]"; defaultValue: "8e4"  }
+                ParamField { id: a1Field;  label: "A [1/s]";    defaultValue: "3.1e98" }
+                ParamField { id: ea1Field; label: "Eₐ [J/mol]"; defaultValue: "6.28e5" }
             }
 
             Item { Layout.preferredHeight: 10 }
@@ -237,8 +237,8 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 16
-                ParamField { id: a2Field;  label: "A [1/s]";    defaultValue: "1e13" }
-                ParamField { id: ea2Field; label: "Eₐ [J/mol]"; defaultValue: "8e4"  }
+                ParamField { id: a2Field;  label: "A [1/s]";    defaultValue: "1.45e4" }
+                ParamField { id: ea2Field; label: "Eₐ [J/mol]"; defaultValue: "1.03e5" }
             }
 
             Item { Layout.preferredHeight: 10 }
@@ -357,7 +357,7 @@ Item {
                     // (1/Ω_vhs)
                     Text {
                         id: vhsBase
-                        text: "(1/Ω_vhs)"
+                        text: "(1/Ωᵥₕₛ)"
                         font { family: "Georgia"; pixelSize: 20; italic: true; weight: Font.Bold }
                         color: Style.colorText
                     }
@@ -433,7 +433,7 @@ Item {
                 }
 
                 Text {
-                    text: "Ω_vhs ="
+                    text: "Ωᵥₕₛ ="
                     font { family: "Georgia"; pixelSize: 16 }
                     color: Style.colorMuted
                 }

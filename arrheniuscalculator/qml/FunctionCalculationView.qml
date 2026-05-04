@@ -329,8 +329,8 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 16
-                ParamField { id: a1Field;   label: "A [1/s]";    defaultValue: "1e13" }
-                ParamField { id: ea1Field;  label: "Eₐ [J/mol]"; defaultValue: "8e4"  }
+                ParamField { id: a1Field;  label: "A [1/s]";    defaultValue: "3.1e98" }
+                ParamField { id: ea1Field; label: "Eₐ [J/mol]"; defaultValue: "6.28e5" }
                 ParamField {
                     id: t1s1Field
                     label: "t₁ [s]"
@@ -411,8 +411,8 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 16
-                ParamField { id: a2Field;   label: "A [1/s]";    defaultValue: "1e13" }
-                ParamField { id: ea2Field;  label: "Eₐ [J/mol]"; defaultValue: "8e4"  }
+                ParamField { id: a2Field;  label: "A [1/s]";    defaultValue: "1.45e4" }
+                ParamField { id: ea2Field; label: "Eₐ [J/mol]"; defaultValue: "1.03e5" }
                 ParamField {
                     id: t1s2Field
                     label: "t₁ [s]"
@@ -549,7 +549,7 @@ Item {
 
                     Text {
                         id: vhsBase
-                        text: "(1/Ω_vhs)"
+                        text: "(1/Ωᵥₕₛ)"
                         font { family: "Georgia"; pixelSize: 20; italic: true; weight: Font.Bold }
                         color: Style.colorText
                     }
@@ -622,7 +622,7 @@ Item {
                 }
 
                 Text {
-                    text: "Ω_vhs ="
+                    text: "Ωᵥₕₛ ="
                     font { family: "Georgia"; pixelSize: 16 }
                     color: Style.colorMuted
                 }
