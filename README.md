@@ -26,6 +26,12 @@ pip install arrheniuscalculator
 arrheniuscalculator
 ```
 
+Or if Python is not included to path:
+
+```bash
+arrheniuscalculator.main
+```
+
 ## Option 2: Installation from source
 
 ### Option a: Using uv
@@ -49,4 +55,3 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -e .
 python -m arrheniuscalculator.main
 ```
-
