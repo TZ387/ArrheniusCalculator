@@ -103,13 +103,14 @@ Item {
 
                 Text {
                     width: parent.width
-                    text: qsTr(
+                        text: qsTr(
                         "Arrhenius Calculator\n\n" +
-                        "(pre-release)\n\n" +
-                        "About & instructions — yet to be added.\n\n" +
-                        "This section will describe the purpose of the tool, " +
-                        "the Arrhenius equation background, how to enter data, " +
-                        "and how to interpret results."
+                        "A simple QML-based application for calculating the Arrhenius integral " +
+                        "across different scenarios, including discrete data and analytical functions.\n\n" +
+                        "Using the application is straightforward: click the Launch button and choose " +
+                        "the type of calculation you want. Then enter the required parameters and press " +
+                        "Calculate.\n\n" +
+                        "You can hover over the question mark icons for additional guidance where needed."
                     )
                     font {
                         family: "Georgia"

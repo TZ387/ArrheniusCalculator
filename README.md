@@ -1,12 +1,16 @@
 # ArrheniusCalculator
 
-A simple QML GUI application that calculates the Arrhenius integral for various cases (tabular data, functional data, etc.).
+A simple QML-based application for calculating the Arrhenius integral across different scenarios, including discrete data and analytical functions.
 
-The program is still in development, so not all listed features are working.
+Using the application is straightforward: click the Launch button and choose the type of calculation you want. Then enter the required parameters and press Calculate. You can hover over the question mark icons for additional guidance where needed.
 
-## Option 1: Install from PyPi
+![ArrheniusCalculator Screenshot](https://github.com/TZ387/ArrheniusCalculator/raw/main/Demonstration.png)
 
-### Option a: Using uv
+## Installation
+
+### Option 1: Install from PyPi
+
+#### Option a: Using uv
 
 ```bash
 uvx arrheniuscalculator
@@ -19,7 +23,7 @@ uv add arrheniuscalculator
 uv run arrheniuscalculator
 ```
 
-### Option b: Using pip
+#### Option b: Using pip
 
 ```bash
 pip install arrheniuscalculator
@@ -32,9 +36,9 @@ Or if Python is not included to path:
 arrheniuscalculator.main
 ```
 
-## Option 2: Installation from source
+### Option 2: Installation from source
 
-### Option a: Using uv
+#### a: Using uv
 
 ```bash
 git clone https://github.com/TZ387/ArrheniusCalculator.git
@@ -43,7 +47,7 @@ uv sync
 uv run arrheniuscalculator
 ```
 
-### Option b: Using pip
+#### b: Using pip
 
 ```bash
 git clone https://github.com/TZ387/ArrheniusCalculator.git
