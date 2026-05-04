@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import ArrheniusCalculator
+import "ArrheniusCalc.js" as Calc
 
 // ── Function Arrhenius calculation view ───────────────────────────────────
 // Formula:  Ω = ∫[t1→t2] A · exp(−Ea / (R · T(t))) dt
@@ -17,104 +18,6 @@ Item {
             if (w.width  < 600) w.width  = 600
             if (w.height < 920) w.height = 920
         }
-    }
-
-    // ── Constants ─────────────────────────────────────────────────────────
-    readonly property real gasConstant: 8.314462618   // J/(mol·K)
-
-    // ── Helpers ───────────────────────────────────────────────────────────
-
-    // Evaluate a numeric expression (may contain +, -, *, /, Math.*, etc.)
-    function parseVal(text) {
-        var s = text.trim()
-        if (s === "") return 0.0
-        try {
-            var result = Function('"use strict"; return (' + s + ')')()
-            var v = Number(result)
-            return isFinite(v) ? v : 0.0
-        } catch (e) {
-            var v2 = parseFloat(s)
-            return isNaN(v2) ? 0.0 : v2
-        }
-    }
-
-    // Build a function of t from a user-supplied expression string.
-    // The expression may use 't' as the independent variable (time) and
-    // standard JS/Math functions: Math.sin, Math.exp, Math.pow, etc.
-    // Returns a JS function(t) → number, or null on parse error.
-    function buildTFunc(expr) {
-        var s = expr.trim()
-        if (s === "") return null
-        try {
-            // Wrap in a function body that accepts 't'
-            var f = Function('"use strict"; return function(t) { return (' + s + '); }')()
-            // Quick sanity check: must return a finite number for t=0
-            var probe = Number(f(0))
-            if (!isFinite(probe)) return null
-            return f
-        } catch (e) {
-            return null
-        }
-    }
-
-    // Adaptive Simpson's rule numerical integration.
-    // Integrates func(t) from a to b with absolute tolerance tol.
-    // Returns NaN if func is invalid or limits are bad.
-    function adaptiveSimpson(func, a, b, tol, maxDepth) {
-        if (func === null || !isFinite(a) || !isFinite(b)) return NaN
-
-        function simpsonStep(fa, fm, fb, h) {
-            return (h / 6.0) * (fa + 4.0 * fm + fb)
-        }
-
-        function recurse(a, b, fa, fm, fb, whole, depth) {
-            var m1 = (a + (a + b) / 2.0) / 2.0
-            var m2 = ((a + b) / 2.0 + b) / 2.0
-            var h  = (b - a) / 2.0
-            var fm1 = func(m1)
-            var fm2 = func(m2)
-            var mid = (a + b) / 2.0
-            var left  = simpsonStep(fa,  fm1, fm,  h / 2.0)
-            var right = simpsonStep(fm,  fm2, fb,  h / 2.0)
-            var delta = left + right - whole
-            if (depth >= maxDepth || Math.abs(delta) <= 15.0 * tol) {
-                return left + right + delta / 15.0
-            }
-            return recurse(a,   mid, fa,  fm1, fm,  left,  depth + 1) +
-                   recurse(mid, b,   fm,  fm2, fb,  right, depth + 1)
-        }
-
-        var fa  = func(a)
-        var fb  = func(b)
-        var mid = (a + b) / 2.0
-        var fm  = func(mid)
-        var h   = b - a
-        var whole = simpsonStep(fa, fm, fb, h)
-        if (!isFinite(fa) || !isFinite(fb) || !isFinite(fm)) return NaN
-        return recurse(a, b, fa, fm, fb, whole, 0)
-    }
-
-    // Main calculation: Ω = ∫[t1→t2] A·exp(−Ea/(R·T(t))) dt
-    function calcOmega(A, Ea, Tfunc, t1, t2) {
-        if (Tfunc === null) return NaN
-        if (!isFinite(t1) || !isFinite(t2)) return NaN
-
-        var integrand = function(t) {
-            var T = Tfunc(t)
-            if (T <= 0) return 0.0
-            return A * Math.exp(-Ea / (gasConstant * T))
-        }
-
-        // Tolerance scales with the interval length; cap at 1e-9
-        var tol = Math.max(1e-9, Math.abs(t2 - t1) * 1e-7)
-        return adaptiveSimpson(integrand, t1, t2, tol, 30)
-    }
-
-    function formatResult(val) {
-        if (isNaN(val) || !isFinite(val)) return "—"
-        if (Math.abs(val) >= 1e6 || (Math.abs(val) < 1e-3 && val !== 0))
-            return val.toExponential(4)
-        return val.toPrecision(6)
     }
 
     // ── State ─────────────────────────────────────────────────────────────
@@ -227,6 +130,7 @@ Item {
                 }
             }
 
+            // ── Integral formula display ──────────────────────────────────
             Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 80
@@ -237,7 +141,6 @@ Item {
                     anchors.centerIn: parent
                     spacing: 0
 
-                    // "Ω = " label
                     Text {
                         id: fmlOmega
                         text: "Ω = "
@@ -246,7 +149,6 @@ Item {
                         anchors.verticalCenter: integralSign.verticalCenter
                     }
 
-                    // Integral sign with limits rendered via stacked items
                     Item {
                         id: integralSign
                         width: limitCol.width
@@ -257,21 +159,18 @@ Item {
                             spacing: 0
                             anchors.horizontalCenter: parent.horizontalCenter
 
-                            // Upper limit
                             Text {
                                 text: "t₂"
                                 font { family: "Georgia"; pixelSize: 15; italic: true }
                                 color: Style.colorText
                                 anchors.horizontalCenter: parent.horizontalCenter
                             }
-                            // The ∫ sign itself
                             Text {
                                 text: "∫"
                                 font { family: "Georgia"; pixelSize: 38 }
                                 color: Style.colorText
                                 anchors.horizontalCenter: parent.horizontalCenter
                             }
-                            // Lower limit
                             Text {
                                 text: "t₁"
                                 font { family: "Georgia"; pixelSize: 15; italic: true }
@@ -281,7 +180,6 @@ Item {
                         }
                     }
 
-                    // Space + "A · e"
                     Text {
                         id: fmlAe
                         text: " A · e"
@@ -290,7 +188,6 @@ Item {
                         anchors.verticalCenter: integralSign.verticalCenter
                     }
 
-                    // Superscript exponent: −Eₐ/(R·T(t))
                     Text {
                         text: "−Eₐ/(R·T(t))"
                         font { family: "Georgia"; pixelSize: 14; italic: true }
@@ -299,7 +196,6 @@ Item {
                         anchors.bottomMargin: -fmlAe.height * 0.38
                     }
 
-                    // " dt"
                     Text {
                         text: " dt"
                         font { family: "Georgia"; pixelSize: 22; italic: true }
@@ -325,7 +221,6 @@ Item {
             SectionLabel { text: "Set 1" }
             Item { Layout.preferredHeight: 10 }
 
-            // Row 1: A | Eₐ | t₁
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 16
@@ -342,7 +237,6 @@ Item {
 
             Item { Layout.preferredHeight: 10 }
 
-            // Row 2: T(t) — fills remaining space | t₂
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 16
@@ -371,13 +265,12 @@ Item {
                     primary: true
                     implicitWidth: 110
                     onClicked: {
-                        var Tfunc = root.buildTFunc(tf1Field.value)
-                        root.omega1 = root.calcOmega(
-                            root.parseVal(a1Field.value),
-                            root.parseVal(ea1Field.value),
-                            Tfunc,
-                            root.parseVal(t1s1Field.value),
-                            root.parseVal(t2s1Field.value)
+                        root.omega1 = Calc.calcOmegaFunc(
+                            Calc.parseVal(a1Field.value),
+                            Calc.parseVal(ea1Field.value),
+                            Calc.buildTFunc(tf1Field.value),
+                            Calc.parseVal(t1s1Field.value),
+                            Calc.parseVal(t2s1Field.value)
                         )
                     }
                 }
@@ -388,7 +281,7 @@ Item {
                     color: Style.colorMuted
                 }
 
-                ResultBox { value: root.formatResult(root.omega1) }
+                ResultBox { value: Calc.formatResult(root.omega1) }
             }
 
             // Separator
@@ -407,7 +300,6 @@ Item {
             SectionLabel { text: "Set 2" }
             Item { Layout.preferredHeight: 10 }
 
-            // Row 1: A | Eₐ | t₁
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 16
@@ -424,7 +316,6 @@ Item {
 
             Item { Layout.preferredHeight: 10 }
 
-            // Row 2: T(t) | t₂
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 16
@@ -453,13 +344,12 @@ Item {
                     primary: true
                     implicitWidth: 110
                     onClicked: {
-                        var Tfunc = root.buildTFunc(tf2Field.value)
-                        root.omega2 = root.calcOmega(
-                            root.parseVal(a2Field.value),
-                            root.parseVal(ea2Field.value),
-                            Tfunc,
-                            root.parseVal(t1s2Field.value),
-                            root.parseVal(t2s2Field.value)
+                        root.omega2 = Calc.calcOmegaFunc(
+                            Calc.parseVal(a2Field.value),
+                            Calc.parseVal(ea2Field.value),
+                            Calc.buildTFunc(tf2Field.value),
+                            Calc.parseVal(t1s2Field.value),
+                            Calc.parseVal(t2s2Field.value)
                         )
                     }
                 }
@@ -470,7 +360,7 @@ Item {
                     color: Style.colorMuted
                 }
 
-                ResultBox { value: root.formatResult(root.omega2) }
+                ResultBox { value: Calc.formatResult(root.omega2) }
             }
 
             // Separator
@@ -484,7 +374,7 @@ Item {
             }
 
             // ══════════════════════════════════════════════════════════════
-            // VHS CALCULATION  (identical to BasicCalculationView)
+            // VHS CALCULATION
             // ══════════════════════════════════════════════════════════════
             RowLayout {
                 Layout.fillWidth: true
@@ -609,15 +499,11 @@ Item {
                     primary: true
                     implicitWidth: 110
                     onClicked: {
-                        var p = root.parseVal(pField.value)
-                        if (isNaN(root.omega1) || isNaN(root.omega2) ||
-                            root.omega1 === 0  || root.omega2 === 0  || p === 0) {
-                            root.omegaVHS = NaN
-                            return
-                        }
-                        var inv = Math.pow(1.0 / root.omega1, p) +
-                                  Math.pow(1.0 / root.omega2, p)
-                        root.omegaVHS = 1.0 / Math.pow(inv, 1.0 / p)
+                        root.omegaVHS = Calc.calcOmegaVHS(
+                            root.omega1,
+                            root.omega2,
+                            Calc.parseVal(pField.value)
+                        )
                     }
                 }
 
@@ -627,7 +513,7 @@ Item {
                     color: Style.colorMuted
                 }
 
-                ResultBox { value: root.formatResult(root.omegaVHS) }
+                ResultBox { value: Calc.formatResult(root.omegaVHS) }
             }
 
             Item { Layout.preferredHeight: 36 }
@@ -635,7 +521,7 @@ Item {
     }
 
     // ─────────────────────────────────────────────────────────────────────
-    // Reusable inline components  (identical to BasicCalculationView)
+    // Reusable inline components
     // ─────────────────────────────────────────────────────────────────────
 
     component SectionLabel: Text {
@@ -695,8 +581,8 @@ Item {
             text: parent.value
             font { family: "Georgia"; pixelSize: 15; italic: parent.value === "—" }
             color: parent.value === "—" ? Style.colorMuted : Style.colorAccent
-            readOnly: true          // prevents editing
-            selectByMouse: true     // enables Ctrl+C and mouse selection
+            readOnly: true
+            selectByMouse: true
         }
     }
 }

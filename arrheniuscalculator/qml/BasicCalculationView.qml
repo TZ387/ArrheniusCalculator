@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import ArrheniusCalculator
+import "ArrheniusCalc.js" as Calc
 
 // ── Basic Arrhenius calculation view ─────────────────────────────────────
 // Formula:  Ω = A · exp(−Ea / (R · T)) · Δt
@@ -11,48 +12,12 @@ Item {
 
     property StackView stackView: StackView.view as StackView
 
-    // ── Fix 1: enlarge the ApplicationWindow when this view is pushed ─────
     Component.onCompleted: {
         var w = Window.window
         if (w) {
             if (w.width  < 600) w.width  = 600
             if (w.height < 920) w.height = 920
         }
-    }
-
-    // ── Constants ─────────────────────────────────────────────────────────
-    readonly property real gasConstant: 8.314462618   // J/(mol·K)
-
-    // ── Helpers ───────────────────────────────────────────────────────────
-
-    // Fix 2: evaluate simple arithmetic before converting to float.
-    // Supports +, -, *, / and scientific notation (45+273.15, 6.2e88 …).
-    function parseVal(text) {
-        var s = text.trim()
-        if (s === "") return 0.0
-        try {
-            // Function constructor evaluates a JS expression safely from
-            // user-supplied text (no external injection; same trust level as
-            // the rest of the QML user-input fields).
-            var result = Function('"use strict"; return (' + s + ')')()
-            var v = Number(result)
-            return isFinite(v) ? v : 0.0
-        } catch (e) {
-            var v2 = parseFloat(s)
-            return isNaN(v2) ? 0.0 : v2
-        }
-    }
-
-    function calcOmega(A, Ea, T, dt) {
-        if (T <= 0) return NaN
-        return A * Math.exp(-Ea / (gasConstant * T)) * dt
-    }
-
-    function formatResult(val) {
-        if (isNaN(val) || !isFinite(val)) return "—"
-        if (Math.abs(val) >= 1e6 || (Math.abs(val) < 1e-3 && val !== 0))
-            return val.toExponential(4)
-        return val.toPrecision(6)
     }
 
     // ── State ─────────────────────────────────────────────────────────────
@@ -118,14 +83,13 @@ Item {
                 }
             }
 
-            // ── Fix 4: Arrhenius formula with real superscript ────────────
+            // ── Arrhenius formula with real superscript ───────────────────
             Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
                 Layout.topMargin: 10
                 Layout.bottomMargin: 2
 
-                // "Ω = A · e" at full size, then the exponent raised above
                 Row {
                     anchors.centerIn: parent
                     spacing: 0
@@ -137,13 +101,10 @@ Item {
                         color: Style.colorText
                     }
 
-                    // Superscript: sits with its bottom aligned to the top
-                    // third of the main text glyphs
                     Text {
                         text: "−Eₐ/(R·T)"
                         font { family: "Georgia"; pixelSize: 12; italic: true }
                         color: Style.colorText
-                        // Raise by roughly half the main cap-height
                         anchors.bottom: mainLeft.top
                         anchors.bottomMargin: -mainLeft.height * 0.38
                     }
@@ -184,7 +145,6 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 16
-                // Fix 2: default shows arithmetic expression the user can edit
                 ParamField { id: t1Field;  label: "T [K]";  defaultValue: "45+273.15" }
                 ParamField { id: dt1Field; label: "Δt [s]"; defaultValue: "1"         }
             }
@@ -200,11 +160,11 @@ Item {
                     primary: true
                     implicitWidth: 110
                     onClicked: {
-                        root.omega1 = root.calcOmega(
-                            root.parseVal(a1Field.value),
-                            root.parseVal(ea1Field.value),
-                            root.parseVal(t1Field.value),
-                            root.parseVal(dt1Field.value)
+                        root.omega1 = Calc.calcOmegaBasic(
+                            Calc.parseVal(a1Field.value),
+                            Calc.parseVal(ea1Field.value),
+                            Calc.parseVal(t1Field.value),
+                            Calc.parseVal(dt1Field.value)
                         )
                     }
                 }
@@ -215,7 +175,7 @@ Item {
                     color: Style.colorMuted
                 }
 
-                ResultBox { value: root.formatResult(root.omega1) }
+                ResultBox { value: Calc.formatResult(root.omega1) }
             }
 
             // Separator
@@ -261,11 +221,11 @@ Item {
                     primary: true
                     implicitWidth: 110
                     onClicked: {
-                        root.omega2 = root.calcOmega(
-                            root.parseVal(a2Field.value),
-                            root.parseVal(ea2Field.value),
-                            root.parseVal(t2Field.value),
-                            root.parseVal(dt2Field.value)
+                        root.omega2 = Calc.calcOmegaBasic(
+                            Calc.parseVal(a2Field.value),
+                            Calc.parseVal(ea2Field.value),
+                            Calc.parseVal(t2Field.value),
+                            Calc.parseVal(dt2Field.value)
                         )
                     }
                 }
@@ -276,7 +236,7 @@ Item {
                     color: Style.colorMuted
                 }
 
-                ResultBox { value: root.formatResult(root.omega2) }
+                ResultBox { value: Calc.formatResult(root.omega2) }
             }
 
             // Separator
@@ -297,9 +257,10 @@ Item {
                 spacing: 0
 
                 SectionLabel { text: "VHS calculation" }
+
                 Item { Layout.fillWidth: true }
 
-                // Help button — hover shows tooltip, no click action
+                // Help button
                 Rectangle {
                     id: helpBtn
                     implicitWidth: 28; implicitHeight: 28
@@ -321,7 +282,6 @@ Item {
 
                     ToolTip {
                         visible: helpHover.hovered
-                        // Small delay so it doesn't flash on quick pass-overs
                         delay: 400
                         timeout: 8000
                         contentItem: Text {
@@ -334,7 +294,7 @@ Item {
                             wrapMode: Text.WordWrap
                         }
                         background: Rectangle {
-                            color: "#FFFBC8"          // classic tooltip yellow
+                            color: "#FFFBC8"
                             border.color: "#C8B400"
                             border.width: 1
                             radius: 4
@@ -343,7 +303,7 @@ Item {
                 }
             }
 
-            // ── Fix 4: VHS formula with real superscripts ─────────────────
+            // VHS formula with real superscripts
             Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 46
@@ -354,14 +314,12 @@ Item {
                     anchors.centerIn: parent
                     spacing: 0
 
-                    // (1/Ω_vhs)
                     Text {
                         id: vhsBase
                         text: "(1/Ωᵥₕₛ)"
                         font { family: "Georgia"; pixelSize: 20; italic: true; weight: Font.Bold }
                         color: Style.colorText
                     }
-                    // ^p
                     Text {
                         text: "p"
                         font { family: "Georgia"; pixelSize: 12; italic: true; weight: Font.Bold }
@@ -400,17 +358,15 @@ Item {
                 }
             }
 
-            // Fix 3: p field on its own row (half-width)
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 16
                 ParamField { id: pField; label: "p"; defaultValue: "0.15" }
-                Item { Layout.fillWidth: true }   // takes the other half
+                Item { Layout.fillWidth: true }
             }
 
             Item { Layout.preferredHeight: 10 }
 
-            // Fix 3: Calculate + Ω_vhs result on the row below
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 14
@@ -420,15 +376,11 @@ Item {
                     primary: true
                     implicitWidth: 110
                     onClicked: {
-                        var p = root.parseVal(pField.value)
-                        if (isNaN(root.omega1) || isNaN(root.omega2) ||
-                            root.omega1 === 0  || root.omega2 === 0  || p === 0) {
-                            root.omegaVHS = NaN
-                            return
-                        }
-                        var inv = Math.pow(1.0 / root.omega1, p) +
-                                  Math.pow(1.0 / root.omega2, p)
-                        root.omegaVHS = 1.0 / Math.pow(inv, 1.0 / p)
+                        root.omegaVHS = Calc.calcOmegaVHS(
+                            root.omega1,
+                            root.omega2,
+                            Calc.parseVal(pField.value)
+                        )
                     }
                 }
 
@@ -438,7 +390,7 @@ Item {
                     color: Style.colorMuted
                 }
 
-                ResultBox { value: root.formatResult(root.omegaVHS) }
+                ResultBox { value: Calc.formatResult(root.omegaVHS) }
             }
 
             Item { Layout.preferredHeight: 36 }
@@ -454,7 +406,6 @@ Item {
         color: Style.colorText
     }
 
-    // Fix 2: inputMethodHints removed so arithmetic expressions are typeable
     component ParamField: ColumnLayout {
         id: pf
         property string label: ""
@@ -486,7 +437,6 @@ Item {
                 font { family: "Georgia"; pixelSize: 15 }
                 color: Style.colorText
                 selectByMouse: true
-                // inputMethodHints intentionally omitted — allows +−*/
             }
         }
     }
@@ -506,8 +456,8 @@ Item {
             text: parent.value
             font { family: "Georgia"; pixelSize: 15; italic: parent.value === "—" }
             color: parent.value === "—" ? Style.colorMuted : Style.colorAccent
-            readOnly: true          // prevents editing
-            selectByMouse: true     // enables Ctrl+C and mouse selection
+            readOnly: true
+            selectByMouse: true
         }
     }
 }
