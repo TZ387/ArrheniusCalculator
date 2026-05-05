@@ -18,6 +18,7 @@ Rectangle {
     border.width: 1
 
     TextInput {
+        id: resultInput
         anchors { fill: parent; leftMargin: 8; rightMargin: 8 }
         verticalAlignment: TextInput.AlignVCenter
         text:  parent.value
@@ -25,5 +26,32 @@ Rectangle {
         color: parent.value === "—" ? Style.colorMuted : Style.colorAccent
         readOnly: true
         selectByMouse: true
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.RightButton
+        onClicked: (mouse) => {
+            if (mouse.button === Qt.RightButton) {
+                resultInput.forceActiveFocus()
+                contextMenu.popup()
+            }
+        }
+    }
+
+    Menu {
+        id: contextMenu
+
+        MenuItem {
+            text: "Copy"
+            enabled: resultInput.selectedText.length > 0
+            onTriggered: resultInput.copy()
+        }
+        MenuSeparator {}
+        MenuItem {
+            text: "Select All"
+            enabled: resultInput.text.length > 0 && resultInput.text !== "—"
+            onTriggered: resultInput.selectAll()
+        }
     }
 }

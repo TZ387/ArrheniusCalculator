@@ -47,5 +47,42 @@ ColumnLayout {
             color: Style.colorText
             selectByMouse: true
         }
+
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.RightButton
+            onClicked: (mouse) => {
+                if (mouse.button === Qt.RightButton) {
+                    pfInput.forceActiveFocus()
+                    contextMenu.popup()
+                }
+            }
+        }
+
+        Menu {
+            id: contextMenu
+
+            MenuItem {
+                text: "Cut"
+                enabled: pfInput.selectedText.length > 0
+                onTriggered: pfInput.cut()
+            }
+            MenuItem {
+                text: "Copy"
+                enabled: pfInput.selectedText.length > 0
+                onTriggered: pfInput.copy()
+            }
+            MenuItem {
+                text: "Paste"
+                enabled: pfInput.canPaste
+                onTriggered: pfInput.paste()
+            }
+            MenuSeparator {}
+            MenuItem {
+                text: "Select All"
+                enabled: pfInput.text.length > 0
+                onTriggered: pfInput.selectAll()
+            }
+        }
     }
 }
