@@ -101,9 +101,10 @@ Item {
                 clip: true
                 contentWidth: availableWidth
 
-                Text {
+                TextEdit {
+                    id: aboutText
                     width: parent.width
-                        text: qsTr(
+                    text: qsTr(
                         "Arrhenius Calculator\n\n" +
                         "A simple QML-based application for calculating the Arrhenius integral " +
                         "across different scenarios, including discrete data and analytical functions.\n\n" +
@@ -117,8 +118,30 @@ Item {
                         pixelSize: 14
                     }
                     color: Style.colorText
-                    lineHeight: 1.6
-                    wrapMode: Text.WordWrap
+                    wrapMode: TextEdit.WordWrap
+                    readOnly: true
+                    selectByMouse: true
+                    selectByKeyboard: true
+                    selectedTextColor: Style.colorSurface
+                    selectionColor: Style.colorAccent
+
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.RightButton
+                        onClicked: (mouse) => {
+                            if (mouse.button === Qt.RightButton)
+                                contextMenu.popup()
+                        }
+                    }
+
+                    Menu {
+                        id: contextMenu
+                        MenuItem {
+                            text: qsTr("Copy")
+                            enabled: aboutText.selectedText.length > 0
+                            onTriggered: aboutText.copy()
+                        }
+                    }
                 }
             }
         }
