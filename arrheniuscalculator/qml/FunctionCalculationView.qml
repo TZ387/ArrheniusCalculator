@@ -244,6 +244,7 @@ Item {
                     id: tf1Field
                     label: "T(t) [K]  — time-dependent function"
                     defaultValue: "318.15 + 20*Math.exp(-t/60)"
+                    labelWrap: Text.WordWrap
                 }
                 ParamField {
                     id: t2s1Field
@@ -323,6 +324,7 @@ Item {
                     id: tf2Field
                     label: "T(t) [K]  — time-dependent function"
                     defaultValue: "318.15"
+                    labelWrap: Text.WordWrap
                 }
                 ParamField {
                     id: t2s2Field
@@ -517,72 +519,6 @@ Item {
             }
 
             Item { Layout.preferredHeight: 36 }
-        }
-    }
-
-    // ─────────────────────────────────────────────────────────────────────
-    // Reusable inline components
-    // ─────────────────────────────────────────────────────────────────────
-
-    component SectionLabel: Text {
-        font { family: "Georgia"; pixelSize: 15; weight: Font.DemiBold }
-        color: Style.colorText
-    }
-
-    component ParamField: ColumnLayout {
-        id: pf
-        property string label: ""
-        property string defaultValue: ""
-        property alias  value: pfInput.text
-        spacing: 4
-        Layout.fillWidth: true
-
-        Text {
-            text: pf.label
-            font { family: "Georgia"; pixelSize: 13 }
-            color: Style.colorMuted
-            wrapMode: Text.WordWrap
-            Layout.fillWidth: true
-        }
-
-        Rectangle {
-            Layout.fillWidth: true
-            implicitHeight: 34
-            radius: 5
-            color: Style.colorSurface
-            border.color: pfInput.activeFocus ? Style.colorAccent : Style.colorBorder
-            border.width: pfInput.activeFocus ? 1.5 : 1
-            Behavior on border.color { ColorAnimation { duration: 120 } }
-
-            TextInput {
-                id: pfInput
-                anchors { fill: parent; leftMargin: 8; rightMargin: 8 }
-                verticalAlignment: TextInput.AlignVCenter
-                text: pf.defaultValue
-                font { family: "Georgia"; pixelSize: 15 }
-                color: Style.colorText
-                selectByMouse: true
-            }
-        }
-    }
-
-    component ResultBox: Rectangle {
-        property string value: "—"
-        Layout.fillWidth: true
-        implicitHeight: 34
-        radius: 5
-        color: Style.colorBg
-        border.color: Style.colorBorder
-        border.width: 1
-
-        TextInput {
-            anchors { fill: parent; leftMargin: 8; rightMargin: 8 }
-            verticalAlignment: TextInput.AlignVCenter
-            text: parent.value
-            font { family: "Georgia"; pixelSize: 15; italic: parent.value === "—" }
-            color: parent.value === "—" ? Style.colorMuted : Style.colorAccent
-            readOnly: true
-            selectByMouse: true
         }
     }
 }
