@@ -9,4 +9,5 @@ QtObject {
     readonly property color colorAccentHov: "#1E3560"
     readonly property color colorText:      "#1A1A2E"
     readonly property color colorMuted:     "#7A7A8C"
+    readonly property color colorScrollBar: "#586674"  
 }

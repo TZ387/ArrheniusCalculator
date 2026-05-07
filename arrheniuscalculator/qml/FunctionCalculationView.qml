@@ -12,14 +12,6 @@ Item {
 
     property StackView stackView: StackView.view as StackView
 
-    Component.onCompleted: {
-        var w = Window.window
-        if (w) {
-            if (w.width  < 600) w.width  = 600
-            if (w.height < 920) w.height = 920
-        }
-    }
-
     // ── State ─────────────────────────────────────────────────────────────
     property real omega1:   NaN
     property real omega2:   NaN
@@ -30,6 +22,13 @@ Item {
         anchors.fill: parent
         contentWidth: availableWidth
         clip: true
+        
+        ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+        ScrollBar.vertical.width: 12
+        ScrollBar.vertical.contentItem: Rectangle {
+            color: Style.colorScrollBar
+        }
+
 
         ColumnLayout {
             width: parent.width
