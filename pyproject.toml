@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "arrheniuscalculator"
-version = "0.1.5.2"
+version = "0.1.5.3"
 description = "A simple GUI tool for calculating Arrhenius integral."
 readme = "README.md"
 requires-python = ">=3.11"

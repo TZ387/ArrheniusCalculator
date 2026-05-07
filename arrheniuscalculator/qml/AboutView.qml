@@ -93,24 +93,26 @@ Item {
             border.width: 1
             radius: 8
 
-            ScrollView {
+            Flickable {
                 anchors {
                     fill: parent
                     margins: 24
                 }
                 clip: true
-                contentWidth: availableWidth
+                contentHeight: aboutText.implicitHeight
+                contentWidth: width   // fixed, no loop possible
 
                 TextEdit {
                     id: aboutText
-                    width: parent.width
+                    width: parent.width   // parent is Flickable — stable, not circular
+                    textFormat: Text.RichText
                     text: qsTr(
-                        "Arrhenius Calculator\n\n" +
+                        "<b>Arrhenius Calculator</b><br><br>" +
                         "A simple QML-based application for calculating the Arrhenius integral " +
-                        "across different scenarios, including discrete data and analytical functions.\n\n" +
+                        "across different scenarios, including discrete data and analytical functions.<br><br>" +
                         "Using the application is straightforward: click the Launch button and choose " +
                         "the type of calculation you want. Then enter the required parameters and press " +
-                        "Calculate.\n\n" +
+                        "Calculate.<br><br>" +
                         "You can hover over the question mark icons for additional guidance where needed."
                     )
                     font {
