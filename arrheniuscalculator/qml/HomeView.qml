@@ -42,63 +42,14 @@ Item {
             radius: 1
         }
 
-        // ── Image placeholder ─────────────────────────────────────────────
-        Rectangle {
+        // ── Image ─────────────────────────────────────────────────────────
+        Image {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            color: Style.colorSurface
-            border.color: Style.colorBorder
-            border.width: 1
-            radius: 8
-
-            // Dashed inner border hint
-            Rectangle {
-                anchors { fill: parent; margins: 10 }
-                color: "transparent"
-                border.color: Style.colorBorder
-                border.width: 1
-                radius: 4
-                opacity: 0.6
-            }
-
-            Column {
-                anchors.centerIn: parent
-                spacing: 10
-
-                Canvas {
-                    width: 56
-                    height: 56
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    onPaint: {
-                        const ctx = getContext("2d")
-                        ctx.clearRect(0, 0, width, height)
-                        ctx.strokeStyle = Style.colorBorder
-                        ctx.lineWidth = 1.5
-                        ctx.beginPath()
-                        ctx.rect(2, 2, width - 4, height - 4)
-                        ctx.fillStyle = Style.colorBg
-                        ctx.fill()
-                        ctx.stroke()
-                        ctx.fillStyle = Style.colorBorder
-                        ctx.beginPath()
-                        ctx.moveTo(8, height - 10)
-                        ctx.lineTo(28, 16)
-                        ctx.lineTo(48, height - 10)
-                        ctx.closePath()
-                        ctx.fill()
-                        ctx.beginPath()
-                        ctx.arc(44, 13, 7, 0, 2 * Math.PI)
-                        ctx.fill()
-                    }
-                }
-
-                Text {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: qsTr("Image placeholder")
-                    font { family: "Georgia"; pixelSize: 13; italic: true }
-                    color: Style.colorMuted
-                }
-            }
+            source: Qt.resolvedUrl("ArrheniusCalculator/Intro_Image.png")
+            fillMode: Image.PreserveAspectFit
+            smooth: true
+            mipmap: true
         }
 
         // ── Button row ────────────────────────────────────────────────────
