@@ -1,7 +1,8 @@
 .pragma library
 
 // ── Arrhenius calculation logic ───────────────────────────────────────────
-// Shared between BasicCalculationView.qml and FunctionCalculationView.qml.
+// Shared between BasicCalculationView.qml, FunctionCalculationView.qml,
+// and TextDataCalculationView.qml.
 // No Qt / QML imports needed — pure JS.
 
 // ── Constants ─────────────────────────────────────────────────────────────
@@ -38,6 +39,23 @@ function buildTFunc(expr) {
     } catch (e) {
         return null
     }
+}
+
+// Parse a whitespace/comma/semicolon-separated list of numbers.
+// Returns an array of finite numbers; non-parseable tokens are silently skipped.
+function parseList(text) {
+    var s = text.trim()
+    if (s === "") return []
+    // Split on any combination of: spaces, tabs, commas, semicolons, pipes
+    var tokens = s.split(/[\s,;|]+/)
+    var out = []
+    for (var i = 0; i < tokens.length; i++) {
+        var tok = tokens[i].trim()
+        if (tok === "") continue
+        var v = Number(tok)
+        if (isFinite(v)) out.push(v)
+    }
+    return out
 }
 
 // ── Output formatting ─────────────────────────────────────────────────────
@@ -112,6 +130,45 @@ function calcOmegaFunc(A, Ea, Tfunc, t1, t2) {
 
     var tol = Math.max(1e-9, Math.abs(t2 - t1) * 1e-7)
     return adaptiveSimpson(integrand, t1, t2, tol, 30)
+}
+
+// ── Text-data Arrhenius (discrete sum over paired t/T lists) ─────────────
+
+// Ω = Σᵢ A · exp(−Eₐ / (R · Tᵢ)) · Δtᵢ
+//
+// where Δtᵢ = tᵢ₊₁ − tᵢ  for i < N−1  (forward difference),
+// and the last interval uses the same Δt as the previous step so that
+// a single-point list still yields a non-zero contribution.
+//
+// tList and TList must be JS arrays of numbers with equal length ≥ 1.
+// Any step where Tᵢ ≤ 0 contributes zero (consistent with other methods).
+// Returns NaN if either list is empty, lengths differ, or A / Ea are not
+// finite numbers.
+function calcOmegaTextData(A, Ea, tList, TList) {
+    if (!isFinite(A) || !isFinite(Ea)) return NaN
+    if (!Array.isArray(tList) || !Array.isArray(TList)) return NaN
+    var n = tList.length
+    if (n === 0 || TList.length !== n) return NaN
+
+    var omega = 0.0
+    for (var i = 0; i < n; i++) {
+        var T = TList[i]
+        if (T <= 0) continue
+
+        // Δt: forward difference, last point reuses previous interval
+        var dt
+        if (i < n - 1) {
+            dt = tList[i + 1] - tList[i]
+        } else if (n > 1) {
+            dt = tList[n - 1] - tList[n - 2]
+        } else {
+            dt = 1.0   // single-point fallback: Δt = 1 s
+        }
+
+        if (!isFinite(dt)) continue
+        omega += A * Math.exp(-Ea / (GAS_CONSTANT * T)) * dt
+    }
+    return omega
 }
 
 // ── VHS combination ───────────────────────────────────────────────────────

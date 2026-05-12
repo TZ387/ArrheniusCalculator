@@ -105,7 +105,7 @@ Item {
                 Layout.fillWidth: true
                 text: qsTr("Calculation from text data")
                 primary: false
-                onClicked: { /* TODO */ } //root.stackView.push(Qt.resolvedUrl("TextDataCalculationView.qml"))
+                onClicked: root.stackView.push(Qt.resolvedUrl("TextDataCalculationView.qml"))
             }
         }
 
