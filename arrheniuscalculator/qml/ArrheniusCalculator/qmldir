@@ -1,6 +1,7 @@
 module ArrheniusCalculator
 singleton Style 1.0 Style.qml
-AppButton   1.0 AppButton.qml
+AppButton    1.0 AppButton.qml
+HelpButton   1.0 HelpButton.qml
 SectionLabel 1.0 SectionLabel.qml
 ParamField   1.0 ParamField.qml
 ResultBox    1.0 ResultBox.qml

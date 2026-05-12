@@ -83,49 +83,16 @@ Item {
                 }
 
                 // Help button — explains the numerical integration method
-                Rectangle {
-                    id: integralHelpBtn
-                    implicitWidth: 28; implicitHeight: 28
-                    radius: 14
-                    color: "transparent"
-                    border.color: integralHelpHover.hovered ? Style.colorAccent : Style.colorMuted
-                    border.width: 1.5
-                    Behavior on border.color { ColorAnimation { duration: 120 } }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "?"
-                        font { family: "Georgia"; pixelSize: 14; weight: Font.Medium }
-                        color: integralHelpHover.hovered ? Style.colorAccent : Style.colorMuted
-                        Behavior on color { ColorAnimation { duration: 120 } }
-                    }
-
-                    HoverHandler { id: integralHelpHover; cursorShape: Qt.WhatsThisCursor }
-
-                    ToolTip {
-                        visible: integralHelpHover.hovered
-                        delay: 400
-                        timeout: 10000
-                        contentItem: Text {
-                            text: "The integral  Ω = ∫ A·exp(−Eₐ/(R·T(t))) dt  is evaluated\n"
-                                + "numerically using adaptive Simpson's rule.\n\n"
-                                + "The integration interval [t₁, t₂] is subdivided recursively\n"
-                                + "until the estimated error falls below a tolerance that scales\n"
-                                + "with the interval length (≈ 10⁻⁷ · |t₂ − t₁|, min 10⁻⁹).\n\n"
-                                + "T(t) must be a valid JavaScript expression in the variable t.\n"
-                                + "Standard Math functions (Math.exp, Math.sin, Math.pow, …)\n"
-                                + "are supported. Samples where T(t) ≤ 0 contribute zero."
-                            font { family: "Georgia"; pixelSize: 12 }
-                            color: "#222222"
-                            wrapMode: Text.WordWrap
-                        }
-                        background: Rectangle {
-                            color: "#FFFBC8"
-                            border.color: "#C8B400"
-                            border.width: 1
-                            radius: 4
-                        }
-                    }
+                HelpButton {
+                    tooltipTimeout: 10000
+                    tooltipText: "The integral  Ω = ∫ A·exp(−Eₐ/(R·T(t))) dt  is evaluated\n"
+                               + "numerically using adaptive Simpson's rule.\n\n"
+                               + "The integration interval [t₁, t₂] is subdivided recursively\n"
+                               + "until the estimated error falls below a tolerance that scales\n"
+                               + "with the interval length (≈ 10⁻⁷ · |t₂ − t₁|, min 10⁻⁹).\n\n"
+                               + "T(t) must be a valid JavaScript expression in the variable t.\n"
+                               + "Standard Math functions (Math.exp, Math.sin, Math.pow, …)\n"
+                               + "are supported. Samples where T(t) ≤ 0 contribute zero."
                 }
             }
 
@@ -385,45 +352,11 @@ Item {
 
                 Item { Layout.fillWidth: true }
 
-                Rectangle {
-                    id: helpBtn
-                    implicitWidth: 28; implicitHeight: 28
-                    radius: 14
-                    color: "transparent"
-                    border.color: helpHover.hovered ? Style.colorAccent : Style.colorMuted
-                    border.width: 1.5
-                    Behavior on border.color { ColorAnimation { duration: 120 } }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "?"
-                        font { family: "Georgia"; pixelSize: 14; weight: Font.Medium }
-                        color: helpHover.hovered ? Style.colorAccent : Style.colorMuted
-                        Behavior on color { ColorAnimation { duration: 120 } }
-                    }
-
-                    HoverHandler { id: helpHover; cursorShape: Qt.WhatsThisCursor }
-
-                    ToolTip {
-                        visible: helpHover.hovered
-                        delay: 400
-                        timeout: 8000
-                        contentItem: Text {
-                            text: "A simple formula taken from\n"
-                                + "\"Variable heat shock response model for medical laser procedures\"\n"
-                                + "article, whose intention is to generalise the Arrhenius calculation\n"
-                                + "for cases where you have short temperature peaks."
-                            font { family: "Georgia"; pixelSize: 12 }
-                            color: "#222222"
-                            wrapMode: Text.WordWrap
-                        }
-                        background: Rectangle {
-                            color: "#FFFBC8"
-                            border.color: "#C8B400"
-                            border.width: 1
-                            radius: 4
-                        }
-                    }
+                HelpButton {
+                    tooltipText: "A simple formula taken from\n"
+                               + "\"Variable heat shock response model for medical laser procedures\"\n"
+                               + "article, whose intention is to generalise the Arrhenius calculation\n"
+                               + "for cases where you have short temperature peaks."
                 }
             }
 

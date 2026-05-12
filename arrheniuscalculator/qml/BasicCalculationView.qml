@@ -258,46 +258,11 @@ Item {
 
                 Item { Layout.fillWidth: true }
 
-                // Help button
-                Rectangle {
-                    id: helpBtn
-                    implicitWidth: 28; implicitHeight: 28
-                    radius: 14
-                    color: "transparent"
-                    border.color: helpHover.hovered ? Style.colorAccent : Style.colorMuted
-                    border.width: 1.5
-                    Behavior on border.color { ColorAnimation { duration: 120 } }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "?"
-                        font { family: "Georgia"; pixelSize: 14; weight: Font.Medium }
-                        color: helpHover.hovered ? Style.colorAccent : Style.colorMuted
-                        Behavior on color { ColorAnimation { duration: 120 } }
-                    }
-
-                    HoverHandler { id: helpHover; cursorShape: Qt.WhatsThisCursor }
-
-                    ToolTip {
-                        visible: helpHover.hovered
-                        delay: 400
-                        timeout: 8000
-                        contentItem: Text {
-                            text: "A simple formula taken from\n"
-                                + "\"Variable heat shock response model for medical laser procedures\"\n"
-                                + "article, whose intention is to generalise the Arrhenius calculation\n"
-                                + "for cases where you have short temperature peaks."
-                            font { family: "Georgia"; pixelSize: 12 }
-                            color: "#222222"
-                            wrapMode: Text.WordWrap
-                        }
-                        background: Rectangle {
-                            color: "#FFFBC8"
-                            border.color: "#C8B400"
-                            border.width: 1
-                            radius: 4
-                        }
-                    }
+                HelpButton {
+                    tooltipText: "A simple formula taken from\n"
+                               + "\"Variable heat shock response model for medical laser procedures\"\n"
+                               + "article, whose intention is to generalise the Arrhenius calculation\n"
+                               + "for cases where you have short temperature peaks."
                 }
             }
 
