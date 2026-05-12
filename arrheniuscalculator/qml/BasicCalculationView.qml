@@ -17,6 +17,9 @@ Item {
     property real omega2:   NaN
     property real omegaVHS: NaN
 
+    property bool useCelsius1: false
+    property bool useCelsius2: false
+
     // ── Scroll wrapper ────────────────────────────────────────────────────
     ScrollView {
         anchors.fill: parent
@@ -143,8 +146,21 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 16
-                ParamField { id: t1Field;  label: "T [K]";  defaultValue: "45+273.15" }
+                ParamField { id: t1Field;  label: root.useCelsius1 ? "T [°C]" : "T [K]"; defaultValue: "45+273.15" }
                 ParamField { id: dt1Field; label: "Δt [s]"; defaultValue: "1"         }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 16
+                Item { Layout.fillWidth: true }
+                CheckBox {
+                    text: qsTr("Use °C")
+                    checked: root.useCelsius1
+                    onToggled: root.useCelsius1 = checked
+                    font.pixelSize: 13
+                    palette.windowText: Style.colorText
+                }
             }
 
             Item { Layout.preferredHeight: 14 }
@@ -158,10 +174,12 @@ Item {
                     primary: true
                     implicitWidth: 110
                     onClicked: {
+                        var t1K = Calc.parseVal(t1Field.value)
+                        if (root.useCelsius1) t1K += 273.15
                         root.omega1 = Calc.calcOmegaBasic(
                             Calc.parseVal(a1Field.value),
                             Calc.parseVal(ea1Field.value),
-                            Calc.parseVal(t1Field.value),
+                            t1K,
                             Calc.parseVal(dt1Field.value)
                         )
                     }
@@ -204,8 +222,21 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 16
-                ParamField { id: t2Field;  label: "T [K]";  defaultValue: "45+273.15" }
+                ParamField { id: t2Field;  label: root.useCelsius2 ? "T [°C]" : "T [K]"; defaultValue: "45+273.15" }
                 ParamField { id: dt2Field; label: "Δt [s]"; defaultValue: "1"         }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 16
+                Item { Layout.fillWidth: true }
+                CheckBox {
+                    text: qsTr("Use °C")
+                    checked: root.useCelsius2
+                    onToggled: root.useCelsius2 = checked
+                    font.pixelSize: 13
+                    palette.windowText: Style.colorText
+                }
             }
 
             Item { Layout.preferredHeight: 14 }
@@ -219,10 +250,12 @@ Item {
                     primary: true
                     implicitWidth: 110
                     onClicked: {
+                        var t2K = Calc.parseVal(t2Field.value)
+                        if (root.useCelsius2) t2K += 273.15
                         root.omega2 = Calc.calcOmegaBasic(
                             Calc.parseVal(a2Field.value),
                             Calc.parseVal(ea2Field.value),
-                            Calc.parseVal(t2Field.value),
+                            t2K,
                             Calc.parseVal(dt2Field.value)
                         )
                     }

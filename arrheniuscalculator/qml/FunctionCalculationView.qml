@@ -17,6 +17,9 @@ Item {
     property real omega2:   NaN
     property real omegaVHS: NaN
 
+    property bool useCelsius1: false
+    property bool useCelsius2: false
+
     // ── Scroll wrapper ────────────────────────────────────────────────────
     ScrollView {
         anchors.fill: parent
@@ -208,7 +211,8 @@ Item {
                 spacing: 16
                 ParamField {
                     id: tf1Field
-                    label: "T(t) [K]  — time-dependent function"
+                    label: root.useCelsius1 ? "T(t) [°C]  — time-dependent function"
+                                            : "T(t) [K]  — time-dependent function"
                     defaultValue: "318.15 + 20*Math.exp(-t/60)"
                     labelWrap: Text.WordWrap
                 }
@@ -218,6 +222,19 @@ Item {
                     defaultValue: "60"
                     Layout.preferredWidth: 80
                     Layout.fillWidth: false
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 16
+                Item { Layout.fillWidth: true }
+                CheckBox {
+                    text: qsTr("Use °C")
+                    checked: root.useCelsius1
+                    onToggled: root.useCelsius1 = checked
+                    font.pixelSize: 13
+                    palette.windowText: Style.colorText
                 }
             }
 
@@ -232,10 +249,14 @@ Item {
                     primary: true
                     implicitWidth: 110
                     onClicked: {
+                        var rawFunc1 = Calc.buildTFunc(tf1Field.value)
+                        var tFunc1 = (root.useCelsius1 && rawFunc1 !== null)
+                            ? function(t) { return rawFunc1(t) + 273.15 }
+                            : rawFunc1
                         root.omega1 = Calc.calcOmegaFunc(
                             Calc.parseVal(a1Field.value),
                             Calc.parseVal(ea1Field.value),
-                            Calc.buildTFunc(tf1Field.value),
+                            tFunc1,
                             Calc.parseVal(t1s1Field.value),
                             Calc.parseVal(t2s1Field.value)
                         )
@@ -288,7 +309,8 @@ Item {
                 spacing: 16
                 ParamField {
                     id: tf2Field
-                    label: "T(t) [K]  — time-dependent function"
+                    label: root.useCelsius2 ? "T(t) [°C]  — time-dependent function"
+                                            : "T(t) [K]  — time-dependent function"
                     defaultValue: "318.15"
                     labelWrap: Text.WordWrap
                 }
@@ -298,6 +320,19 @@ Item {
                     defaultValue: "60"
                     Layout.preferredWidth: 80
                     Layout.fillWidth: false
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 16
+                Item { Layout.fillWidth: true }
+                CheckBox {
+                    text: qsTr("Use °C")
+                    checked: root.useCelsius2
+                    onToggled: root.useCelsius2 = checked
+                    font.pixelSize: 13
+                    palette.windowText: Style.colorText
                 }
             }
 
@@ -312,10 +347,14 @@ Item {
                     primary: true
                     implicitWidth: 110
                     onClicked: {
+                        var rawFunc2 = Calc.buildTFunc(tf2Field.value)
+                        var tFunc2 = (root.useCelsius2 && rawFunc2 !== null)
+                            ? function(t) { return rawFunc2(t) + 273.15 }
+                            : rawFunc2
                         root.omega2 = Calc.calcOmegaFunc(
                             Calc.parseVal(a2Field.value),
                             Calc.parseVal(ea2Field.value),
-                            Calc.buildTFunc(tf2Field.value),
+                            tFunc2,
                             Calc.parseVal(t1s2Field.value),
                             Calc.parseVal(t2s2Field.value)
                         )
