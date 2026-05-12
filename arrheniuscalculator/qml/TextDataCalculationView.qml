@@ -18,6 +18,9 @@ Item {
     property real omega2:   NaN
     property real omegaVHS: NaN
 
+    property bool useCelsius1: false
+    property bool useCelsius2: false
+
     // ── Scroll wrapper ────────────────────────────────────────────────────
     ScrollView {
         anchors.fill: parent
@@ -164,11 +167,26 @@ Item {
 
             Item { Layout.preferredHeight: 10 }
 
-            ParamField {
+            RowLayout {
                 Layout.fillWidth: true
-                id: tTempList1Field
-                label: "T [K]  — list of values"
-                defaultValue: "310 320 330 340 350 360"
+                spacing: 12
+
+                ParamField {
+                    Layout.fillWidth: true
+                    id: tTempList1Field
+                    label: root.useCelsius1 ? "T [°C]  — list of values"
+                                            : "T [K]  — list of values"
+                    defaultValue: "310 320 330 340 350 360"
+                }
+
+                CheckBox {
+                    id: celsius1Check
+                    text: qsTr("Use °C")
+                    checked: root.useCelsius1
+                    onToggled: root.useCelsius1 = checked
+                    font.pixelSize: 13
+                    palette.windowText: Style.colorText
+                }
             }
 
             Item { Layout.preferredHeight: 14 }
@@ -182,11 +200,15 @@ Item {
                     primary: true
                     implicitWidth: 110
                     onClicked: {
+                        var rawT1 = Calc.parseList(tTempList1Field.value)
+                        var kelvin1 = root.useCelsius1
+                            ? rawT1.map(function(v) { return v + 273.15 })
+                            : rawT1
                         root.omega1 = Calc.calcOmegaTextData(
                             Calc.parseVal(a1Field.value),
                             Calc.parseVal(ea1Field.value),
                             Calc.parseList(tList1Field.value),
-                            Calc.parseList(tTempList1Field.value)
+                            kelvin1
                         )
                     }
                 }
@@ -234,11 +256,26 @@ Item {
 
             Item { Layout.preferredHeight: 10 }
 
-            ParamField {
+            RowLayout {
                 Layout.fillWidth: true
-                id: tTempList2Field
-                label: "T [K]  — list of values"
-                defaultValue: "310 320 330 340 350 360"
+                spacing: 12
+
+                ParamField {
+                    Layout.fillWidth: true
+                    id: tTempList2Field
+                    label: root.useCelsius2 ? "T [°C]  — list of values"
+                                            : "T [K]  — list of values"
+                    defaultValue: "310 320 330 340 350 360"
+                }
+
+                CheckBox {
+                    id: celsius2Check
+                    text: qsTr("Use °C")
+                    checked: root.useCelsius2
+                    onToggled: root.useCelsius2 = checked
+                    font.pixelSize: 13
+                    palette.windowText: Style.colorText
+                }
             }
 
             Item { Layout.preferredHeight: 14 }
@@ -252,11 +289,15 @@ Item {
                     primary: true
                     implicitWidth: 110
                     onClicked: {
+                        var rawT2 = Calc.parseList(tTempList2Field.value)
+                        var kelvin2 = root.useCelsius2
+                            ? rawT2.map(function(v) { return v + 273.15 })
+                            : rawT2
                         root.omega2 = Calc.calcOmegaTextData(
                             Calc.parseVal(a2Field.value),
                             Calc.parseVal(ea2Field.value),
                             Calc.parseList(tList2Field.value),
-                            Calc.parseList(tTempList2Field.value)
+                            kelvin2
                         )
                     }
                 }
