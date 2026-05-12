@@ -176,7 +176,7 @@ Item {
                     id: tTempList1Field
                     label: root.useCelsius1 ? "T [°C]  — list of values"
                                             : "T [K]  — list of values"
-                    defaultValue: "310 320 330 340 350 360"
+                    defaultValue: "310, 320; 330 340, 350 360"
                 }
 
                 CheckBox {
