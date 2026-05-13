@@ -179,13 +179,10 @@ Item {
                     defaultValue: "310, 320; 330 340, 350 360"
                 }
 
-                CheckBox {
+                CelsiusCheckBox {
                     id: celsius1Check
-                    text: qsTr("Use °C")
                     checked: root.useCelsius1
                     onToggled: root.useCelsius1 = checked
-                    font.pixelSize: 13
-                    palette.windowText: Style.colorText
                 }
             }
 
@@ -268,13 +265,10 @@ Item {
                     defaultValue: "310 320 330 340 350 360"
                 }
 
-                CheckBox {
+                CelsiusCheckBox {
                     id: celsius2Check
-                    text: qsTr("Use °C")
                     checked: root.useCelsius2
                     onToggled: root.useCelsius2 = checked
-                    font.pixelSize: 13
-                    palette.windowText: Style.colorText
                 }
             }
 

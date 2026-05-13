@@ -154,12 +154,9 @@ Item {
                 Layout.fillWidth: true
                 spacing: 16
                 Item { Layout.fillWidth: true }
-                CheckBox {
-                    text: qsTr("Use °C")
+                CelsiusCheckBox {
                     checked: root.useCelsius1
                     onToggled: root.useCelsius1 = checked
-                    font.pixelSize: 13
-                    palette.windowText: Style.colorText
                 }
             }
 
@@ -230,12 +227,9 @@ Item {
                 Layout.fillWidth: true
                 spacing: 16
                 Item { Layout.fillWidth: true }
-                CheckBox {
-                    text: qsTr("Use °C")
+                CelsiusCheckBox {
                     checked: root.useCelsius2
                     onToggled: root.useCelsius2 = checked
-                    font.pixelSize: 13
-                    palette.windowText: Style.colorText
                 }
             }
 
