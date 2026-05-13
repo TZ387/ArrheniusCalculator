@@ -6,3 +6,4 @@ SectionLabel 1.0 SectionLabel.qml
 ParamField   1.0 ParamField.qml
 ResultBox        1.0 ResultBox.qml
 CelsiusCheckBox  1.0 CelsiusCheckBox.qml
+VhsSection       1.0 VhsSection.qml
