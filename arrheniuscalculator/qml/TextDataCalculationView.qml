@@ -49,32 +49,7 @@ Item {
                 Layout.fillWidth: true
                 spacing: 12
 
-                Rectangle {
-                    id: backBtn
-                    implicitWidth:  36
-                    implicitHeight: 36
-                    radius: 18
-                    color: backMouse.containsMouse ? Style.colorAccent : "transparent"
-                    border.color: Style.colorAccent
-                    border.width: 1.5
-                    Behavior on color { ColorAnimation { duration: 120 } }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "←"
-                        font.pixelSize: 16
-                        color: backMouse.containsMouse ? Style.colorSurface : Style.colorAccent
-                        Behavior on color { ColorAnimation { duration: 120 } }
-                    }
-
-                    MouseArea {
-                        id: backMouse
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: root.stackView.pop()
-                    }
-                }
+                BackButton { stackView: root.stackView }
 
                 Text {
                     Layout.fillWidth: true
