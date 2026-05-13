@@ -37,6 +37,7 @@ ColumnLayout {
         border.color: pfInput.activeFocus ? Style.colorAccent : Style.colorBorder
         border.width: pfInput.activeFocus ? 1.5 : 1
         Behavior on border.color { ColorAnimation { duration: 120 } }
+        clip: true
 
         TextInput {
             id: pfInput
