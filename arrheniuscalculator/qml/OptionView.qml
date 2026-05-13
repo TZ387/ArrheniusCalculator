@@ -39,13 +39,7 @@ Item {
         }
 
         // Thin accent rule
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 2
-            color: Style.colorAccent
-            opacity: 0.25
-            radius: 1
-        }
+        RuleLine { topMargin: 0; bottomMargin: 0 }
 
         // ── Calculation type buttons ───────────────────────────────────────
         ColumnLayout {

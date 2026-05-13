@@ -108,15 +108,7 @@ Item {
                 }
             }
 
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 2
-                Layout.topMargin: 4
-                Layout.bottomMargin: 20
-                color: Style.colorAccent
-                opacity: 0.25
-                radius: 1
-            }
+            RuleLine {}
 
             // ══════════════════════════════════════════════════════════════
             // SET 1
@@ -195,14 +187,7 @@ Item {
             }
 
             // Separator
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                Layout.topMargin: 20
-                Layout.bottomMargin: 20
-                color: Style.colorBorder
-                opacity: 0.6
-            }
+            DividerLine {}
 
             // ══════════════════════════════════════════════════════════════
             // SET 2
@@ -281,14 +266,7 @@ Item {
             }
 
             // Separator
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                Layout.topMargin: 20
-                Layout.bottomMargin: 20
-                color: Style.colorBorder
-                opacity: 0.6
-            }
+            DividerLine {}
 
             // ══════════════════════════════════════════════════════════════
             // VHS CALCULATION
