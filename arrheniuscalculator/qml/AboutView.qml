@@ -9,13 +9,36 @@ Item {
 
     // Grab the StackView from the parent hierarchy
     property StackView stackView: StackView.view as StackView
-    
+
+    // ── Responsive scale helpers ──────────────────────────────────────────
+    // Width is the primary driver — this view is horizontally laid out and
+    // width is the more stable dimension as the window resizes.
+    readonly property real refSize: width
+
+    // Outer margin: ~4 % of width, clamped 20–56 px
+    readonly property real outerMargin: Math.max(20, Math.min(56, refSize * 0.04))
+
+    // Spacing between layout rows: ~2.5 % of width, clamped 14–36 px
+    readonly property real rowSpacing: Math.max(14, Math.min(36, refSize * 0.025))
+
+    // Title font: ~3.5 % of width, clamped 22–40 px
+    readonly property real titlePixelSize: Math.round(Math.max(22, Math.min(40, refSize * 0.035)))
+
+    // Body font: ~2 % of width, clamped 15–24 px
+    readonly property real bodyPixelSize: Math.round(Math.max(15, Math.min(24, refSize * 0.02)))
+
+    // Card inner padding: ~3 % of shorter edge, clamped 12–36 px
+    readonly property real cardPadding: Math.max(12, Math.min(36, refSize * 0.03))
+
+    // Card corner radius: ~1.2 % of shorter edge, clamped 4–16 px
+    readonly property real cardRadius: Math.max(4, Math.min(16, refSize * 0.012))
+
     ColumnLayout {
         anchors {
             fill: parent
-            margins: 36
+            margins: root.outerMargin
         }
-        spacing: 24
+        spacing: root.rowSpacing
 
         // ── Header row: back button + title ───────────────────────────────
         RowLayout {
@@ -30,7 +53,7 @@ Item {
                 text: qsTr("About")
                 font {
                     family: "Georgia"
-                    pixelSize: 26
+                    pixelSize: root.titlePixelSize
                     weight: Font.DemiBold
                     letterSpacing: 0.5
                 }
@@ -50,20 +73,20 @@ Item {
             color: Style.colorSurface
             border.color: Style.colorBorder
             border.width: 1
-            radius: 8
+            radius: root.cardRadius
 
             Flickable {
                 anchors {
                     fill: parent
-                    margins: 24
+                    margins: root.cardPadding
                 }
                 clip: true
                 contentHeight: aboutText.implicitHeight
-                contentWidth: width   // fixed, no loop possible
+                contentWidth: width
 
                 TextEdit {
                     id: aboutText
-                    width: parent.width   // parent is Flickable — stable, not circular
+                    width: parent.width
                     textFormat: Text.RichText
                     text: qsTr(
                         "<b>Arrhenius Calculator</b><br><br>" +
@@ -76,7 +99,7 @@ Item {
                     )
                     font {
                         family: "Georgia"
-                        pixelSize: 14
+                        pixelSize: root.bodyPixelSize
                     }
                     color: Style.colorText
                     wrapMode: TextEdit.WordWrap
@@ -108,6 +131,6 @@ Item {
         }
 
         // Small bottom padding
-        Item { Layout.preferredHeight: 4 }
+        Item { Layout.preferredHeight: root.rowSpacing / 3 }
     }
 }
