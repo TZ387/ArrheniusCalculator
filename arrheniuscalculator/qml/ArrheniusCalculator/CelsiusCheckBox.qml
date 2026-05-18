@@ -8,6 +8,6 @@ CheckBox {
     id: root
 
     text: qsTr("Use °C")
-    font.pixelSize: 13
+    font.pixelSize: 16
     palette.windowText: Style.colorText
 }

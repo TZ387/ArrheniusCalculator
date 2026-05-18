@@ -23,7 +23,7 @@ ColumnLayout {
 
     Text {
         text:      pf.label
-        font      { family: "Georgia"; pixelSize: 13 }
+        font      { family: "Georgia"; pixelSize: 16 }
         color:     Style.colorMuted
         wrapMode:  pf.labelWrap
         Layout.fillWidth: true
@@ -44,7 +44,7 @@ ColumnLayout {
             anchors { fill: parent; leftMargin: 8; rightMargin: 8 }
             verticalAlignment: TextInput.AlignVCenter
             text:  pf.defaultValue
-            font  { family: "Georgia"; pixelSize: 15 }
+            font  { family: "Georgia"; pixelSize: 17 }
             color: Style.colorText
             selectByMouse: true
         }
