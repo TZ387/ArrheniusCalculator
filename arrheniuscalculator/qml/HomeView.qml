@@ -43,13 +43,34 @@ Item {
         }
 
         // ── Image ─────────────────────────────────────────────────────────
-        Image {
+        // The Item fills the layout cell; the Image inside uses PreserveAspectFit
+        // so its painted area may be smaller than the cell (letterboxed). The
+        // Rectangle is sized to paintedWidth/paintedHeight so the border hugs
+        // only the visible picture, not the empty letterbox space.
+        Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            source: Qt.resolvedUrl("ArrheniusCalculator/Intro_Image.png")
-            fillMode: Image.PreserveAspectFit
-            smooth: true
-            mipmap: true
+
+            Image {
+                id: introImage
+                anchors.centerIn: parent
+                width: parent.width
+                height: parent.height
+                source: Qt.resolvedUrl("ArrheniusCalculator/Intro_Image.png")
+                fillMode: Image.PreserveAspectFit
+                smooth: true
+                mipmap: true
+            }
+
+            Rectangle {
+                anchors.centerIn: parent
+                width:  introImage.paintedWidth
+                height: introImage.paintedHeight
+                color: "transparent"
+                border.color: "#031297"   // dark blue frame
+                border.width: 2.5
+                radius: 8
+            }
         }
 
         // ── Button row ────────────────────────────────────────────────────
