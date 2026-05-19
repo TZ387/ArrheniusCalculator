@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import ArrheniusCalculator
 
 // ── CalcStatusBar ─────────────────────────────────────────────────────────
@@ -9,8 +10,8 @@ import ArrheniusCalculator
 //   message   — text to display; bar is hidden when empty
 //
 // Usage: place directly after the Calculate button RowLayout, before
-// the DividerLine.  No extra spacing Items needed — the bar's own
-// topMargin and internal padding handle the gaps.
+// the DividerLine.  Set Layout.fillWidth: true and Layout.topMargin
+// at the usage site.
 Rectangle {
     id: root
 
@@ -37,16 +38,20 @@ Rectangle {
     // site, not here, because attached properties require a ColumnLayout
     // parent to be present at the time of object creation.
 
-    visible:            message !== ""
-    height:             visible ? contentRow.implicitHeight + 12 : 0
-    radius:             5
-    color:              _bg
-    border.color:       _border
-    border.width:       1
+    visible:        message !== ""
+    implicitHeight: visible ? layout.implicitHeight + 12 : 0
+    height:         implicitHeight
+    radius:         5
+    color:          _bg
+    border.color:   _border
+    border.width:   1
 
     // ── Content ───────────────────────────────────────────────────────────
-    Row {
-        id: contentRow
+    // RowLayout lets the message Text claim all remaining width via
+    // Layout.fillWidth, giving wrapMode a well-defined constraint so the
+    // rectangle always grows to fit the text rather than clipping it.
+    RowLayout {
+        id: layout
         anchors {
             left:           parent.left
             right:          parent.right
@@ -57,19 +62,19 @@ Rectangle {
         spacing: 8
 
         Text {
-            text:  root._icon
-            color: root._text
-            font { pixelSize: 13; weight: Font.Bold }
-            anchors.verticalCenter: parent.verticalCenter
+            text:             root._icon
+            color:            root._text
+            font {            pixelSize: 15; weight: Font.Bold }
+            Layout.alignment: Qt.AlignTop
+            Layout.topMargin: 1
         }
 
         Text {
-            text:      root.message
-            color:     root._text
-            font {     pixelSize: 12; family: "Georgia" }
-            wrapMode:  Text.WordWrap
-            width:     contentRow.width - 28   // icon + spacing
-            anchors.verticalCenter: parent.verticalCenter
+            text:             root.message
+            color:            root._text
+            font {            pixelSize: 14; family: "Georgia" }
+            wrapMode:         Text.WordWrap
+            Layout.fillWidth: true
         }
     }
 }
