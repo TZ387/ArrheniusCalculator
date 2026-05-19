@@ -5,8 +5,8 @@ import ArrheniusCalculator
 import "../ArrheniusCalc.js" as Calc
 
 // ── Reusable VHS section ──────────────────────────────────────────────────
-// Renders the full VHS block: header, formula, p field, Calculate button
-// and result box. Place it directly inside the parent ColumnLayout.
+// Renders the full VHS block: header, formula, p field, Calculate button,
+// result box and status bar. Place it directly inside the parent ColumnLayout.
 //
 // Usage:
 //   VhsSection {
@@ -124,11 +124,16 @@ Item {
                 primary: true
                 implicitWidth: 110
                 onClicked: {
-                    root.omegaVHS = Calc.calcOmegaVHS(
-                        root.omega1,
-                        root.omega2,
-                        Calc.parseVal(pField.value)
-                    )
+                    var p = Calc.parseVal(pField.value)
+
+                    var v = Calc.validateVHS(root.omega1, root.omega2, p)
+                    vhsStatus.severity = v.severity
+                    vhsStatus.message  = v.message
+
+                    if (v.ok)
+                        root.omegaVHS = Calc.calcOmegaVHS(root.omega1, root.omega2, p)
+                    else
+                        root.omegaVHS = NaN
                 }
             }
 
@@ -139,6 +144,12 @@ Item {
             }
 
             ResultBox { value: Calc.formatResult(root.omegaVHS) }
+        }
+
+        CalcStatusBar {
+            id: vhsStatus
+            Layout.fillWidth: true
+            Layout.topMargin: 8
         }
     }
 }

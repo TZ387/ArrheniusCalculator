@@ -183,6 +183,28 @@ function calcOmegaVHS(omega1, omega2, p) {
     return 1.0 / Math.pow(inv, 1.0 / p)
 }
 
+// ── VHS validation ────────────────────────────────────────────────────────
+
+// Validate inputs for VhsSection before calling calcOmegaVHS.
+function validateVHS(omega1, omega2, p) {
+    if (isNaN(omega1) || !isFinite(omega1))
+        return { ok: false, severity: "error",
+                 message: "Ω₁ is not available — calculate Set 1 first." }
+    if (isNaN(omega2) || !isFinite(omega2))
+        return { ok: false, severity: "error",
+                 message: "Ω₂ is not available — calculate Set 2 first." }
+    if (omega1 <= 0)
+        return { ok: false, severity: "error",
+                 message: "Ω₁ must be positive — VHS combination is undefined for zero or negative values." }
+    if (omega2 <= 0)
+        return { ok: false, severity: "error",
+                 message: "Ω₂ must be positive — VHS combination is undefined for zero or negative values." }
+    if (!isFinite(p) || p === 0)
+        return { ok: false, severity: "error",
+                 message: "p is zero or invalid — enter a non-zero exponent." }
+    return { ok: true, severity: "ok", message: "Calculation successful." }
+}
+
 // ── Validation helpers ────────────────────────────────────────────────────
 // Each function returns { ok: bool, severity: string, message: string }.
 // severity is "ok" | "warn" | "error" — maps directly to CalcStatusBar.
