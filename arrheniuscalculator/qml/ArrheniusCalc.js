@@ -182,3 +182,72 @@ function calcOmegaVHS(omega1, omega2, p) {
               Math.pow(1.0 / omega2, p)
     return 1.0 / Math.pow(inv, 1.0 / p)
 }
+
+// ── Validation helpers ────────────────────────────────────────────────────
+// Each function returns { ok: bool, severity: string, message: string }.
+// severity is "ok" | "warn" | "error" — maps directly to CalcStatusBar.
+
+// Validate inputs for BasicCalculationView before calling calcOmegaBasic.
+function validateBasic(A, Ea, T_K, dt) {
+    if (!isFinite(A) || A === 0)
+        return { ok: false, severity: "error",
+                 message: "A is zero or invalid — enter a non-zero pre-exponential factor." }
+    if (!isFinite(Ea))
+        return { ok: false, severity: "error",
+                 message: "Eₐ is invalid — enter a numeric activation energy." }
+    if (!isFinite(T_K) || T_K <= 0)
+        return { ok: false, severity: "error",
+                 message: "Temperature must be greater than 0 K." }
+    if (!isFinite(dt))
+        return { ok: false, severity: "error",
+                 message: "Δt is invalid — enter a numeric time step." }
+    if (dt === 0)
+        return { ok: false, severity: "warn",
+                 message: "Δt is zero — Ω will be zero regardless of other inputs." }
+    return { ok: true, severity: "ok", message: "Calculation successful." }
+}
+
+// Validate inputs for FunctionCalculationView before calling calcOmegaFunc.
+// rawExpr is the raw string from the T(t) field (for the error message).
+function validateFunc(A, Ea, Tfunc, rawExpr, t1, t2) {
+    if (!isFinite(A) || A === 0)
+        return { ok: false, severity: "error",
+                 message: "A is zero or invalid — enter a non-zero pre-exponential factor." }
+    if (!isFinite(Ea))
+        return { ok: false, severity: "error",
+                 message: "Eₐ is invalid — enter a numeric activation energy." }
+    if (Tfunc === null)
+        return { ok: false, severity: "error",
+                 message: "T(t) expression could not be parsed or returned a non-finite value at t = 0. "
+                        + "Check the syntax and make sure it returns a valid temperature in K (or °C)." }
+    if (!isFinite(t1) || !isFinite(t2))
+        return { ok: false, severity: "error",
+                 message: "Integration limits t₁ and t₂ must be finite numbers." }
+    if (t1 === t2)
+        return { ok: false, severity: "warn",
+                 message: "t₁ equals t₂ — the integration interval is zero, so Ω = 0." }
+    return { ok: true, severity: "ok", message: "Calculation successful." }
+}
+
+// Validate inputs for TextDataCalculationView before calling calcOmegaTextData.
+// tList and TList are already-parsed JS arrays.
+function validateTextData(A, Ea, tList, TList) {
+    if (!isFinite(A) || A === 0)
+        return { ok: false, severity: "error",
+                 message: "A is zero or invalid — enter a non-zero pre-exponential factor." }
+    if (!isFinite(Ea))
+        return { ok: false, severity: "error",
+                 message: "Eₐ is invalid — enter a numeric activation energy." }
+    if (tList.length === 0)
+        return { ok: false, severity: "error",
+                 message: "t list is empty — enter at least one time value." }
+    if (TList.length === 0)
+        return { ok: false, severity: "error",
+                 message: "T list is empty — enter at least one temperature value." }
+    if (tList.length !== TList.length)
+        return { ok: false, severity: "error",
+                 message: "List length mismatch: t has " + tList.length
+                        + " value(s), T has " + TList.length
+                        + " value(s). Both lists must be the same length." }
+    return { ok: true, severity: "ok", message: "Calculation successful." }
+}

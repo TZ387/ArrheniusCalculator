@@ -10,3 +10,4 @@ CelsiusCheckBox  1.0 CelsiusCheckBox.qml
 DividerLine      1.0 DividerLine.qml
 RuleLine         1.0 RuleLine.qml
 VhsSection       1.0 VhsSection.qml
+CalcStatusBar    1.0 CalcStatusBar.qml

@@ -164,16 +164,22 @@ Item {
                     primary: true
                     implicitWidth: 110
                     onClicked: {
-                        var rawT1 = Calc.parseList(tTempList1Field.value)
+                        var tList1  = Calc.parseList(tList1Field.value)
+                        var rawT1   = Calc.parseList(tTempList1Field.value)
                         var kelvin1 = root.useCelsius1
                             ? rawT1.map(function(v) { return v + 273.15 })
                             : rawT1
-                        root.omega1 = Calc.calcOmegaTextData(
-                            Calc.parseVal(a1Field.value),
-                            Calc.parseVal(ea1Field.value),
-                            Calc.parseList(tList1Field.value),
-                            kelvin1
-                        )
+                        var A1  = Calc.parseVal(a1Field.value)
+                        var Ea1 = Calc.parseVal(ea1Field.value)
+
+                        var v1 = Calc.validateTextData(A1, Ea1, tList1, kelvin1)
+                        status1.severity = v1.severity
+                        status1.message  = v1.message
+
+                        if (v1.ok)
+                            root.omega1 = Calc.calcOmegaTextData(A1, Ea1, tList1, kelvin1)
+                        else
+                            root.omega1 = NaN
                     }
                 }
 
@@ -184,6 +190,12 @@ Item {
                 }
 
                 ResultBox { value: Calc.formatResult(root.omega1) }
+            }
+
+            CalcStatusBar {
+                id: status1
+                Layout.fillWidth: true
+                Layout.topMargin: 8
             }
 
             // Separator
@@ -243,16 +255,22 @@ Item {
                     primary: true
                     implicitWidth: 110
                     onClicked: {
-                        var rawT2 = Calc.parseList(tTempList2Field.value)
+                        var tList2  = Calc.parseList(tList2Field.value)
+                        var rawT2   = Calc.parseList(tTempList2Field.value)
                         var kelvin2 = root.useCelsius2
                             ? rawT2.map(function(v) { return v + 273.15 })
                             : rawT2
-                        root.omega2 = Calc.calcOmegaTextData(
-                            Calc.parseVal(a2Field.value),
-                            Calc.parseVal(ea2Field.value),
-                            Calc.parseList(tList2Field.value),
-                            kelvin2
-                        )
+                        var A2  = Calc.parseVal(a2Field.value)
+                        var Ea2 = Calc.parseVal(ea2Field.value)
+
+                        var v2 = Calc.validateTextData(A2, Ea2, tList2, kelvin2)
+                        status2.severity = v2.severity
+                        status2.message  = v2.message
+
+                        if (v2.ok)
+                            root.omega2 = Calc.calcOmegaTextData(A2, Ea2, tList2, kelvin2)
+                        else
+                            root.omega2 = NaN
                     }
                 }
 
@@ -263,6 +281,12 @@ Item {
                 }
 
                 ResultBox { value: Calc.formatResult(root.omega2) }
+            }
+
+            CalcStatusBar {
+                id: status2
+                Layout.fillWidth: true
+                Layout.topMargin: 8
             }
 
             // Separator

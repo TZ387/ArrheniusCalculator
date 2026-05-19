@@ -217,13 +217,19 @@ Item {
                         var tFunc1 = (root.useCelsius1 && rawFunc1 !== null)
                             ? function(t) { return rawFunc1(t) + 273.15 }
                             : rawFunc1
-                        root.omega1 = Calc.calcOmegaFunc(
-                            Calc.parseVal(a1Field.value),
-                            Calc.parseVal(ea1Field.value),
-                            tFunc1,
-                            Calc.parseVal(t1s1Field.value),
-                            Calc.parseVal(t2s1Field.value)
-                        )
+                        var A1  = Calc.parseVal(a1Field.value)
+                        var Ea1 = Calc.parseVal(ea1Field.value)
+                        var t1  = Calc.parseVal(t1s1Field.value)
+                        var t2  = Calc.parseVal(t2s1Field.value)
+
+                        var v1 = Calc.validateFunc(A1, Ea1, tFunc1, tf1Field.value, t1, t2)
+                        status1.severity = v1.severity
+                        status1.message  = v1.message
+
+                        if (v1.ok)
+                            root.omega1 = Calc.calcOmegaFunc(A1, Ea1, tFunc1, t1, t2)
+                        else
+                            root.omega1 = NaN
                     }
                 }
 
@@ -234,6 +240,12 @@ Item {
                 }
 
                 ResultBox { value: Calc.formatResult(root.omega1) }
+            }
+
+            CalcStatusBar {
+                id: status1
+                Layout.fillWidth: true
+                Layout.topMargin: 8
             }
 
             // Separator
@@ -305,13 +317,19 @@ Item {
                         var tFunc2 = (root.useCelsius2 && rawFunc2 !== null)
                             ? function(t) { return rawFunc2(t) + 273.15 }
                             : rawFunc2
-                        root.omega2 = Calc.calcOmegaFunc(
-                            Calc.parseVal(a2Field.value),
-                            Calc.parseVal(ea2Field.value),
-                            tFunc2,
-                            Calc.parseVal(t1s2Field.value),
-                            Calc.parseVal(t2s2Field.value)
-                        )
+                        var A2  = Calc.parseVal(a2Field.value)
+                        var Ea2 = Calc.parseVal(ea2Field.value)
+                        var t1  = Calc.parseVal(t1s2Field.value)
+                        var t2  = Calc.parseVal(t2s2Field.value)
+
+                        var v2 = Calc.validateFunc(A2, Ea2, tFunc2, tf2Field.value, t1, t2)
+                        status2.severity = v2.severity
+                        status2.message  = v2.message
+
+                        if (v2.ok)
+                            root.omega2 = Calc.calcOmegaFunc(A2, Ea2, tFunc2, t1, t2)
+                        else
+                            root.omega2 = NaN
                     }
                 }
 
@@ -322,6 +340,12 @@ Item {
                 }
 
                 ResultBox { value: Calc.formatResult(root.omega2) }
+            }
+
+            CalcStatusBar {
+                id: status2
+                Layout.fillWidth: true
+                Layout.topMargin: 8
             }
 
             // Separator

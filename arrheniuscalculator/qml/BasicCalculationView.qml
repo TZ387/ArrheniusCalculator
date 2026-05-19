@@ -140,12 +140,18 @@ Item {
                     onClicked: {
                         var t1K = Calc.parseVal(t1Field.value)
                         if (root.useCelsius1) t1K += 273.15
-                        root.omega1 = Calc.calcOmegaBasic(
-                            Calc.parseVal(a1Field.value),
-                            Calc.parseVal(ea1Field.value),
-                            t1K,
-                            Calc.parseVal(dt1Field.value)
-                        )
+                        var A1  = Calc.parseVal(a1Field.value)
+                        var Ea1 = Calc.parseVal(ea1Field.value)
+                        var dt1 = Calc.parseVal(dt1Field.value)
+
+                        var v1 = Calc.validateBasic(A1, Ea1, t1K, dt1)
+                        status1.severity = v1.severity
+                        status1.message  = v1.message
+
+                        if (v1.ok)
+                            root.omega1 = Calc.calcOmegaBasic(A1, Ea1, t1K, dt1)
+                        else
+                            root.omega1 = NaN
                     }
                 }
 
@@ -156,6 +162,12 @@ Item {
                 }
 
                 ResultBox { value: Calc.formatResult(root.omega1) }
+            }
+
+            CalcStatusBar {
+                id: status1
+                Layout.fillWidth: true
+                Layout.topMargin: 8
             }
 
             // Separator
@@ -206,12 +218,18 @@ Item {
                     onClicked: {
                         var t2K = Calc.parseVal(t2Field.value)
                         if (root.useCelsius2) t2K += 273.15
-                        root.omega2 = Calc.calcOmegaBasic(
-                            Calc.parseVal(a2Field.value),
-                            Calc.parseVal(ea2Field.value),
-                            t2K,
-                            Calc.parseVal(dt2Field.value)
-                        )
+                        var A2  = Calc.parseVal(a2Field.value)
+                        var Ea2 = Calc.parseVal(ea2Field.value)
+                        var dt2 = Calc.parseVal(dt2Field.value)
+
+                        var v2 = Calc.validateBasic(A2, Ea2, t2K, dt2)
+                        status2.severity = v2.severity
+                        status2.message  = v2.message
+
+                        if (v2.ok)
+                            root.omega2 = Calc.calcOmegaBasic(A2, Ea2, t2K, dt2)
+                        else
+                            root.omega2 = NaN
                     }
                 }
 
@@ -222,6 +240,12 @@ Item {
                 }
 
                 ResultBox { value: Calc.formatResult(root.omega2) }
+            }
+
+            CalcStatusBar {
+                id: status2
+                Layout.fillWidth: true
+                Layout.topMargin: 8
             }
 
             // Separator
