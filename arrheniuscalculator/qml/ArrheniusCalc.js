@@ -81,8 +81,10 @@ function calcOmegaBasic(A, Ea, T, dt) {
 
 // Integrates func(t) from a to b with absolute tolerance tol and a
 // maximum recursion depth of maxDepth.
+// deadline is a Date.now() timestamp; recursion aborts if the wall-clock
+// time exceeds it, throwing a sentinel string caught by calcOmegaFunc.
 // Returns NaN if func is null or the limits are not finite.
-function adaptiveSimpson(func, a, b, tol, maxDepth) {
+function adaptiveSimpson(func, a, b, tol, maxDepth, deadline) {
     if (func === null || !isFinite(a) || !isFinite(b)) return NaN
 
     function simpsonStep(fa, fm, fb, h) {
@@ -90,6 +92,7 @@ function adaptiveSimpson(func, a, b, tol, maxDepth) {
     }
 
     function recurse(a, b, fa, fm, fb, whole, depth) {
+        if (Date.now() > deadline) throw "timeout"
         var m1  = (a + (a + b) / 2.0) / 2.0
         var m2  = ((a + b) / 2.0 + b) / 2.0
         var h   = (b - a) / 2.0
@@ -119,8 +122,13 @@ function adaptiveSimpson(func, a, b, tol, maxDepth) {
 
 // Ω = ∫[t1→t2] A · exp(−Ea / (R · T(t))) dt
 // Tfunc must be a JS function(t) → temperature in K.
+//
+// Returns { result: number, timedOut: bool }.
+// result is NaN on pre-sampling failure or timeout.
+// timedOut is true when the time budget (2 s) was exceeded.
 function calcOmegaFunc(A, Ea, Tfunc, t1, t2) {
-    if (Tfunc === null || !isFinite(t1) || !isFinite(t2)) return NaN
+    if (Tfunc === null || !isFinite(t1) || !isFinite(t2))
+        return { result: NaN, timedOut: false }
 
     var integrand = function(t) {
         var T = Tfunc(t)
@@ -128,8 +136,27 @@ function calcOmegaFunc(A, Ea, Tfunc, t1, t2) {
         return A * Math.exp(-Ea / (GAS_CONSTANT * T))
     }
 
-    var tol = Math.max(1e-9, Math.abs(t2 - t1) * 1e-7)
-    return adaptiveSimpson(integrand, t1, t2, tol, 30)
+    // ── Pre-sampling: probe the integrand at 8 evenly-spaced points ──
+    // If every sample is non-finite or above the JS safe ceiling, the
+    // integral would diverge or produce Infinity — abort early.
+    var SAMPLE_COUNT = 8
+    var allNonFinite = true
+    for (var si = 0; si <= SAMPLE_COUNT; si++) {
+        var st = t1 + (t2 - t1) * si / SAMPLE_COUNT
+        var sv = integrand(st)
+        if (isFinite(sv)) { allNonFinite = false; break }
+    }
+    if (allNonFinite) return { result: NaN, timedOut: false }
+
+    // ── Time-budgeted integration (2 second wall-clock limit) ─────────
+    var tol      = Math.max(1e-9, Math.abs(t2 - t1) * 1e-7)
+    var deadline = Date.now() + 2000
+    try {
+        var r = adaptiveSimpson(integrand, t1, t2, tol, 30, deadline)
+        return { result: r, timedOut: false }
+    } catch (e) {
+        return { result: NaN, timedOut: true }
+    }
 }
 
 // ── Text-data Arrhenius (discrete sum over paired t/T lists) ─────────────

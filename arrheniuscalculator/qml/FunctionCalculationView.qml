@@ -226,10 +226,22 @@ Item {
                         status1.severity = v1.severity
                         status1.message  = v1.message
 
-                        if (v1.ok)
-                            root.omega1 = Calc.calcOmegaFunc(A1, Ea1, tFunc1, t1, t2)
-                        else
+                        if (v1.ok) {
+                            var r1 = Calc.calcOmegaFunc(A1, Ea1, tFunc1, t1, t2)
+                            if (r1.timedOut) {
+                                status1.severity = "warn"
+                                status1.message  = "Integration timed out after 2 s — the integrand may be too complex or the interval too wide. Try narrowing [t₁, t₂] or simplifying T(t)."
+                                root.omega1 = NaN
+                            } else if (!isFinite(r1.result)) {
+                                status1.severity = "error"
+                                status1.message  = "Integrand is non-finite across the entire interval — the Arrhenius term overflows with these parameters."
+                                root.omega1 = NaN
+                            } else {
+                                root.omega1 = r1.result
+                            }
+                        } else {
                             root.omega1 = NaN
+                        }
                     }
                 }
 
@@ -326,10 +338,22 @@ Item {
                         status2.severity = v2.severity
                         status2.message  = v2.message
 
-                        if (v2.ok)
-                            root.omega2 = Calc.calcOmegaFunc(A2, Ea2, tFunc2, t1, t2)
-                        else
+                        if (v2.ok) {
+                            var r2 = Calc.calcOmegaFunc(A2, Ea2, tFunc2, t1, t2)
+                            if (r2.timedOut) {
+                                status2.severity = "warn"
+                                status2.message  = "Integration timed out after 2 s — the integrand may be too complex or the interval too wide. Try narrowing [t₁, t₂] or simplifying T(t)."
+                                root.omega2 = NaN
+                            } else if (!isFinite(r2.result)) {
+                                status2.severity = "error"
+                                status2.message  = "Integrand is non-finite across the entire interval — the Arrhenius term overflows with these parameters."
+                                root.omega2 = NaN
+                            } else {
+                                root.omega2 = r2.result
+                            }
+                        } else {
                             root.omega2 = NaN
+                        }
                     }
                 }
 
