@@ -210,7 +210,8 @@ function validateVHS(omega1, omega2, p) {
 // severity is "ok" | "warn" | "error" — maps directly to CalcStatusBar.
 
 // Validate inputs for BasicCalculationView before calling calcOmegaBasic.
-function validateBasic(A, Ea, T_K, dt) {
+// dtRaw is the untrimmed string from the field, used to distinguish empty from zero.
+function validateBasic(A, Ea, T_K, dt, dtRaw) {
     if (!isFinite(A) || A === 0)
         return { ok: false, severity: "error",
                  message: "A is zero or invalid — enter a non-zero pre-exponential factor." }
@@ -220,6 +221,9 @@ function validateBasic(A, Ea, T_K, dt) {
     if (!isFinite(T_K) || T_K <= 0)
         return { ok: false, severity: "error",
                  message: "Temperature must be greater than 0 K." }
+    if (dtRaw.trim() === "")
+        return { ok: false, severity: "error",
+                 message: "Δt is empty — enter a numeric time step." }
     if (!isFinite(dt))
         return { ok: false, severity: "error",
                  message: "Δt is invalid — enter a numeric time step." }
@@ -231,7 +235,8 @@ function validateBasic(A, Ea, T_K, dt) {
 
 // Validate inputs for FunctionCalculationView before calling calcOmegaFunc.
 // rawExpr is the raw string from the T(t) field (for the error message).
-function validateFunc(A, Ea, Tfunc, rawExpr, t1, t2) {
+// t1Raw and t2Raw are untrimmed strings from the limit fields, to distinguish empty from zero.
+function validateFunc(A, Ea, Tfunc, rawExpr, t1, t2, t1Raw, t2Raw) {
     if (!isFinite(A) || A === 0)
         return { ok: false, severity: "error",
                  message: "A is zero or invalid — enter a non-zero pre-exponential factor." }
@@ -242,6 +247,9 @@ function validateFunc(A, Ea, Tfunc, rawExpr, t1, t2) {
         return { ok: false, severity: "error",
                  message: "T(t) expression could not be parsed or returned a non-finite value at t = 0. "
                         + "Check the syntax and make sure it returns a valid temperature in K (or °C)." }
+    if (t1Raw.trim() === "" || t2Raw.trim() === "")
+        return { ok: false, severity: "error",
+                 message: "Integration limits t₁ and t₂ must both be filled in." }
     if (!isFinite(t1) || !isFinite(t2))
         return { ok: false, severity: "error",
                  message: "Integration limits t₁ and t₂ must be finite numbers." }

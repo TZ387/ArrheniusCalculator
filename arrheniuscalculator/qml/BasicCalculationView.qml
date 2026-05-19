@@ -144,7 +144,7 @@ Item {
                         var Ea1 = Calc.parseVal(ea1Field.value)
                         var dt1 = Calc.parseVal(dt1Field.value)
 
-                        var v1 = Calc.validateBasic(A1, Ea1, t1K, dt1)
+                        var v1 = Calc.validateBasic(A1, Ea1, t1K, dt1, dt1Field.value)
                         status1.severity = v1.severity
                         status1.message  = v1.message
 
@@ -222,7 +222,7 @@ Item {
                         var Ea2 = Calc.parseVal(ea2Field.value)
                         var dt2 = Calc.parseVal(dt2Field.value)
 
-                        var v2 = Calc.validateBasic(A2, Ea2, t2K, dt2)
+                        var v2 = Calc.validateBasic(A2, Ea2, t2K, dt2, dt2Field.value)
                         status2.severity = v2.severity
                         status2.message  = v2.message
 

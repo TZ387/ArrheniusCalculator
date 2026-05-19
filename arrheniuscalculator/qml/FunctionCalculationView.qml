@@ -222,7 +222,7 @@ Item {
                         var t1  = Calc.parseVal(t1s1Field.value)
                         var t2  = Calc.parseVal(t2s1Field.value)
 
-                        var v1 = Calc.validateFunc(A1, Ea1, tFunc1, tf1Field.value, t1, t2)
+                        var v1 = Calc.validateFunc(A1, Ea1, tFunc1, tf1Field.value, t1, t2, t1s1Field.value, t2s1Field.value)
                         status1.severity = v1.severity
                         status1.message  = v1.message
 
@@ -322,7 +322,7 @@ Item {
                         var t1  = Calc.parseVal(t1s2Field.value)
                         var t2  = Calc.parseVal(t2s2Field.value)
 
-                        var v2 = Calc.validateFunc(A2, Ea2, tFunc2, tf2Field.value, t1, t2)
+                        var v2 = Calc.validateFunc(A2, Ea2, tFunc2, tf2Field.value, t1, t2, t1s2Field.value, t2s2Field.value)
                         status2.severity = v2.severity
                         status2.message  = v2.message
 
