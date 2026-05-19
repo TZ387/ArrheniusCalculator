@@ -255,7 +255,7 @@ function validateBasic(A, Ea, T_K, dt, dtRaw) {
         return { ok: false, severity: "error",
                  message: "Δt is invalid — enter a numeric time step." }
     if (dt === 0)
-        return { ok: false, severity: "warn",
+        return { ok: true, severity: "warn",
                  message: "Δt is zero — Ω will be zero regardless of other inputs." }
     return { ok: true, severity: "ok", message: "Calculation successful." }
 }
@@ -281,7 +281,7 @@ function validateFunc(A, Ea, Tfunc, rawExpr, t1, t2, t1Raw, t2Raw) {
         return { ok: false, severity: "error",
                  message: "Integration limits t₁ and t₂ must be finite numbers." }
     if (t1 === t2)
-        return { ok: false, severity: "warn",
+        return { ok: true, severity: "warn",
                  message: "t₁ equals t₂ — the integration interval is zero, so Ω = 0." }
     return { ok: true, severity: "ok", message: "Calculation successful." }
 }
