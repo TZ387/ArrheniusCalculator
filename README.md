@@ -2,9 +2,11 @@
 
 A simple QML-based application for calculating the Arrhenius integral across different scenarios, including discrete data and analytical functions.
 
-Using the application is straightforward: click the Launch button and choose the type of calculation you want. Then enter the required parameters and press Calculate. You can hover over the question mark icons for additional guidance where needed.
+Using the application is straightforward: click the Launch button and choose the type of calculation you want. Then enter the required parameters and press Calculate. You can hover over the question mark icons for additional information where needed.
 
-![ArrheniusCalculator Screenshot](https://github.com/TZ387/ArrheniusCalculator/raw/main/Demonstration.png)
+<p align="center">
+  <img src="https://github.com/TZ387/ArrheniusCalculator/raw/main/Demonstration.png" alt="ArrheniusCalculator Screenshot" />
+</p>
 
 ## Installation
 
@@ -59,3 +61,7 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -e .
 python -m arrheniuscalculator.main
 ```
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
