@@ -7,9 +7,25 @@ name = "arrheniuscalculator"
 version = "0.1.7.1"
 description = "A simple GUI tool for calculating Arrhenius integral."
 readme = "README.md"
+license = { file = "LICENSE" }
 requires-python = ">=3.11"
+keywords = ["arrhenius", "calculator", "thermal", "qml", "gui"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Environment :: X11 Applications :: Qt",
+    "Operating System :: OS Independent",
+]
 dependencies = [
-    "pyside6",
+    "pyside6>=6.5",
 ]
 authors = [
     { name = "Tilen", email = "tilen.zel@gmail.com" }
@@ -34,5 +50,5 @@ include = ["arrheniuscalculator*"]
     "qml/ArrheniusCalculator/*"
 ]
 
-[project.scripts]
+[project.gui-scripts]
 arrheniuscalculator = "arrheniuscalculator.main:main"
